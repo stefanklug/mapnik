@@ -810,8 +810,6 @@ int main()
     return False
 
 def boost_regex_has_icu(context):
-    context.env.Append(LIBS='icui18n')
-    context.env.Append(LIBS='icudata')
     ret = context.TryRun("""
 
 #include <boost/regex/icu.hpp>
