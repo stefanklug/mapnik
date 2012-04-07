@@ -54,7 +54,7 @@ template <>
 inline boost::optional<int> fast_cast(xml_tree const& tree, std::string const& value)
 {
     int result;
-    if (mapnik::conversions::string2int(value, result))
+    if (mapnik::util::string2int(value, result))
         return boost::optional<int>(result);
     return boost::optional<int>();
 }
@@ -63,7 +63,7 @@ template <>
 inline boost::optional<double> fast_cast(xml_tree const& tree, std::string const& value)
 {
     double result;
-    if (mapnik::conversions::string2double(value, result))
+    if (mapnik::util::string2double(value, result))
         return boost::optional<double>(result);
     return boost::optional<double>();
 }
@@ -72,7 +72,7 @@ template <>
 inline boost::optional<float> fast_cast(xml_tree const& tree, std::string const& value)
 {
     float result;
-    if (mapnik::conversions::string2float(value, result))
+    if (mapnik::util::string2float(value, result))
         return boost::optional<float>(result);
     return boost::optional<float>();
 }
@@ -104,7 +104,8 @@ inline boost::optional<expression_ptr> fast_cast(xml_tree const& tree, std::stri
     if (expression_factory::parse_from_string(expr, value, tree.expr_grammar))
     {
         return expr;
-    } else
+    }
+    else
     {
         throw mapnik::config_error("Failed to parse expression '" + value + "'");
     }
@@ -170,7 +171,8 @@ xml_tree::xml_tree(std::string const& encoding)
       file_(),
       tr_(encoding),
       color_grammar(),
-      expr_grammar(tr_)
+      expr_grammar(tr_),
+      path_expr_grammar()
 {
     node_.set_processed(true); //root node is always processed
 }
@@ -199,7 +201,7 @@ xml_attribute::xml_attribute(std::string const& value_)
 
 /****************************************************************************/
 
-node_not_found::node_not_found(std::string node_name)
+node_not_found::node_not_found(std::string const& node_name)
     : node_name_(node_name)
 {
 
@@ -254,7 +256,7 @@ more_than_one_child::~more_than_one_child() throw()
 
 /****************************************************************************/
 
-xml_node::xml_node(xml_tree &tree, std::string name, unsigned line, bool text_node)
+xml_node::xml_node(xml_tree &tree, std::string const& name, unsigned line, bool text_node)
     : tree_(tree),
       name_(name),
       text_node_(text_node),

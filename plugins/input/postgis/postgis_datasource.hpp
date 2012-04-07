@@ -49,8 +49,30 @@ using mapnik::coord2d;
 
 class postgis_datasource : public datasource
 {
+public:
+    postgis_datasource(const parameters &params, bool bind=true);
+    ~postgis_datasource();
+    mapnik::datasource::datasource_t type() const;
+    static std::string name();
+    featureset_ptr features(const query& q) const;
+    featureset_ptr features_at_point(coord2d const& pt) const;
+    mapnik::box2d<double> envelope() const;
+    boost::optional<mapnik::datasource::geometry_t> get_geometry_type() const;
+    layer_descriptor get_descriptor() const;
+    void bind() const;
+
+private:
+    std::string sql_bbox(box2d<double> const& env) const;
+    std::string populate_tokens(const std::string& sql, double scale_denom, box2d<double> const& env) const;
+    std::string populate_tokens(const std::string& sql) const;
+    static std::string unquote(const std::string& sql);
+    boost::shared_ptr<IResultSet> get_resultset(boost::shared_ptr<Connection> const &conn, std::string const& sql) const;
+    postgis_datasource(const postgis_datasource&);
+    postgis_datasource& operator=(const postgis_datasource&);
+
     static const std::string GEOMETRY_COLUMNS;
     static const std::string SPATIAL_REF_SYS;
+    static const double FMAX;
     const std::string uri_;
     const std::string username_;
     const std::string password_;
@@ -58,7 +80,7 @@ class postgis_datasource : public datasource
     mutable std::string schema_;
     mutable std::string geometry_table_;
     const std::string geometry_field_;
-    const std::string key_field_;
+    mutable std::string key_field_;
     const int cursor_fetch_size_;
     const int row_limit_;
     mutable std::string geometryColumn_;
@@ -76,25 +98,6 @@ class postgis_datasource : public datasource
     int intersect_min_scale_;
     int intersect_max_scale_;
     //bool show_queries_;
-public:
-    static std::string name();
-    mapnik::datasource::datasource_t type() const;
-    featureset_ptr features(const query& q) const;
-    featureset_ptr features_at_point(coord2d const& pt) const;
-    mapnik::box2d<double> envelope() const;
-    boost::optional<mapnik::datasource::geometry_t> get_geometry_type() const;
-    layer_descriptor get_descriptor() const;
-    postgis_datasource(const parameters &params, bool bind=true);
-    ~postgis_datasource();
-    void bind() const;
-private:
-    std::string sql_bbox(box2d<double> const& env) const;
-    std::string populate_tokens(const std::string& sql, double scale_denom, box2d<double> const& env) const;
-    std::string populate_tokens(const std::string& sql) const;
-    static std::string unquote(const std::string& sql);
-    boost::shared_ptr<IResultSet> get_resultset(boost::shared_ptr<Connection> const &conn, std::string const& sql) const;
-    postgis_datasource(const postgis_datasource&);
-    postgis_datasource& operator=(const postgis_datasource&);
 };
 
 #endif //POSTGIS_DATASOURCE_HPP

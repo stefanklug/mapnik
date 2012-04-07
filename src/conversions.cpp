@@ -20,6 +20,9 @@
  *
  *****************************************************************************/
 
+// mapnik
+#include <mapnik/util/conversions.hpp>
+
 // boost
 #include <boost/spirit/include/qi.hpp>
 
@@ -31,7 +34,7 @@
     BOOST_AUTO(name, boost::proto::deep_copy(expr));            \
 
 
-namespace mapnik { namespace conversions {
+namespace mapnik { namespace util {
 
 using namespace boost::spirit;
 

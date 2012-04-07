@@ -1,8 +1,4 @@
-# $Id: CHANGELOG 776 2008-12-7 01:30:27Z dane $
-
-----------------
-Mapnik Changelog
-----------------
+# Mapnik Changelog
 
 A simple log of core changes affecting Mapnik usage.
 
@@ -11,10 +7,21 @@ Developers: Please commit along with changes.
 For a complete change history, see the SVN log.
 
 
-Mapnik 2.1.0
-------------
+## Mapnik 2.1.0
 
-- Removed mutex locking during reprojection if using >= proj 4.7 (#1072)
+- GDAL: allow setting nodata value on the fly (will override value if nodata is set in data) (#1161)
+ 
+- GDAL: respect nodata for paletted/colormapped images (#1160)
+
+- PostGIS: Added a new option called 'autodetect_key_field' (by default false) that if true will
+  trigger autodetection of a given tables' primary key allowing for feature.id() to represent
+  globally unique ids. This option has no effect if the user has not manually supplied the 'key_field' option. (#804)
+
+- Cairo: Add full rendering support for markers to match AGG renderer functionality (#1071)
+
+- Fix Markers rendering so that ellipse height/width units are pixels (previously were unintentially radii) (#1134)
+
+- Added 'ignore-placement` attribute to markers-symbolizer (#1135)
 
 - Removed PointDatasource - use more robust MemoryDatasource instead (#1032)
 
@@ -31,8 +38,7 @@ Mapnik 2.1.0
 - Added support for justify-alignment=auto. This is the new default. (#1125)
 
 
-Mapnik 2.0.0
-------------
+## Mapnik 2.0.0
 
 - Add minimum-path-length property to text_symbolizer to allow labels to be placed only on lines of a certain length (#865)
 
@@ -121,8 +127,7 @@ Mapnik 2.0.0
 - Implement MarkersSymbolizer in Cairo render and improve the markers placement finder. (#553)
 
 
-Mapnik 0.7.2 Release
---------------------
+# Mapnik 0.7.2 Release
 
 - Added forward compatibility for Mapnik 2.0 XML syntax (https://trac.mapnik.org/wiki/Mapnik2/Changes)
 
@@ -165,8 +170,7 @@ Mapnik 0.7.2 Release
 - Fixed reading of label_position_tolerance on text_symbolizer and height for building_symbolizer
 
 
-Mapnik 0.7.0 Release
---------------------
+# Mapnik 0.7.0 Release
 
 (Packaged from r1574)
 
@@ -205,13 +209,13 @@ Mapnik 0.7.0 Release
 
     * Valid Usages include:
 
-      <Parameter name="table">
-        (Select ST_Union(geom) as geom from table where ST_Intersects(geometry,!bbox!)) as map
-      </Parameter>
+        <Parameter name="table">
+          (Select ST_Union(geom) as geom from table where ST_Intersects(geometry,!bbox!)) as map
+        </Parameter>
 
-      <Parameter name="table">
-        (Select * from table where geom &amp;&amp; !bbox!) as map
-      </Parameter>
+        <Parameter name="table">
+          (Select * from table where geom &amp;&amp; !bbox!) as map
+        </Parameter>
 
 - PostGIS Plugin: Added 'scale_denominator' substitution ability in sql query string (#415/#465)
 
@@ -307,8 +311,7 @@ Mapnik 0.7.0 Release
 
 
 
-Mapnik 0.6.1 Release
---------------------
+# Mapnik 0.6.1 Release
 
 (Packaged from r1247)
 
@@ -392,8 +395,7 @@ Mapnik 0.6.1 Release
 
 
 
-Mapnik 0.6.0 Release
---------------------
+# Mapnik 0.6.0 Release
 
 (Packaged from r1066)
 

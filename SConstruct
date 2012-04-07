@@ -359,7 +359,7 @@ opts.AddVariables(
     EnumVariable('THREADING','Set threading support','multi', ['multi','single']),
     EnumVariable('XMLPARSER','Set xml parser','libxml2', ['libxml2','ptree']),
     ('JOBS', 'Set the number of parallel compilations', "1", lambda key, value, env: int(value), int),
-    BoolVariable('DEMO', 'Compile demo c++ application', 'False'),
+    BoolVariable('DEMO', 'Compile demo c++ application', 'True'),
     BoolVariable('PGSQL2SQLITE', 'Compile and install a utility to convert postgres tables to sqlite', 'False'),
     BoolVariable('COLOR_PRINT', 'Print build status information in color', 'True'),
     BoolVariable('SAMPLE_INPUT_PLUGINS', 'Compile and install sample plugins', 'False'),
@@ -810,6 +810,9 @@ int main()
     return False
 
 def boost_regex_has_icu(context):
+    if env['RUNTIME_LINK'] == 'static':
+        context.env.Append(LIBS='icui18n')
+        context.env.Append(LIBS='icudata')
     ret = context.TryRun("""
 
 #include <boost/regex/icu.hpp>
@@ -1716,7 +1719,7 @@ if not HELP_REQUESTED:
     
     # build C++ tests
     # not ready for release
-    #SConscript('tests/cpp_tests/build.py')
+    SConscript('tests/cpp_tests/build.py')
     
     # not ready for release
     #if env['SVG_RENDERER']:

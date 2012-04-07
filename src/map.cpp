@@ -28,6 +28,7 @@
 #include <mapnik/filter_featureset.hpp>
 #include <mapnik/hit_test_filter.hpp>
 #include <mapnik/scale_denominator.hpp>
+#include <mapnik/config.hpp> // for PROJ_ENVELOPE_POINTS
 
 // boost
 #include <boost/make_shared.hpp>
@@ -96,7 +97,6 @@ Map::Map(const Map& rhs)
       current_extent_(rhs.current_extent_),
       maximum_extent_(rhs.maximum_extent_),
       base_path_(rhs.base_path_),
-      extra_attr_(rhs.extra_attr_),
       extra_params_(rhs.extra_params_) {}
 
 Map& Map::operator=(const Map& rhs)
@@ -115,7 +115,6 @@ Map& Map::operator=(const Map& rhs)
     aspectFixMode_=rhs.aspectFixMode_;
     maximum_extent_=rhs.maximum_extent_;
     base_path_=rhs.base_path_;
-    extra_attr_=rhs.extra_attr_;
     extra_params_=rhs.extra_params_;
     return *this;
 }
@@ -358,6 +357,11 @@ boost::optional<box2d<double> > const& Map::maximum_extent() const
     return maximum_extent_;
 }
 
+boost::optional<box2d<double> > & Map::maximum_extent()
+{
+    return maximum_extent_;
+}
+
 std::string const&  Map::base_path() const
 {
     return base_path_;
@@ -407,8 +411,7 @@ void Map::zoom_all()
                     proj_transform prj_trans(proj0,proj1);
 
                     box2d<double> layer_ext = itr->envelope();
-                    // TODO - consider using more robust method: http://trac.mapnik.org/ticket/751
-                    if (prj_trans.backward(layer_ext))
+                    if (prj_trans.backward(layer_ext, PROJ_ENVELOPE_POINTS))
                     {
                         success = true;
 #ifdef MAPNIK_DEBUG
@@ -682,21 +685,6 @@ std::string Map::get_metawriter_property(std::string name) const
     std::string result;
     to_utf8(metawriter_output_properties[name], result);
     return result;
-}
-
-parameters const& Map::get_extra_attributes() const
-{
-    return extra_attr_;
-}
-
-parameters& Map::get_extra_attributes()
-{
-    return extra_attr_;
-}
-
-void Map::set_extra_attributes(parameters& attr)
-{
-    extra_attr_ = attr;
 }
 
 parameters const& Map::get_extra_parameters() const

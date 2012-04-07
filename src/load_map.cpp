@@ -49,12 +49,13 @@
 #include <mapnik/symbolizer.hpp>
 #include <mapnik/rule.hpp>
 #include <mapnik/config_error.hpp>
+#include <mapnik/util/dasharray_parser.hpp>
+#include <mapnik/util/conversions.hpp>
 
 // boost
 #include <boost/optional.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/trim.hpp>
-#include <boost/lexical_cast.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
@@ -68,8 +69,6 @@
 #include <iostream>
 #include <sstream>
 
-using boost::lexical_cast;
-using boost::bad_lexical_cast;
 using boost::tokenizer;
 
 using std::endl;
@@ -166,8 +165,6 @@ void map_parser::parse_map(Map & map, xml_node const& pt, std::string const& bas
         xml_node const& map_node = pt.get_child("Map");
         try
         {
-            parameters extra_attr;
-
             // Check if relative paths should be interpreted as relative to/from XML location
             // Default is true, and map_parser::ensure_relative_to_xml will be called to modify path
             optional<boolean> paths_from_xml = map_node.get_opt_attr<boolean>("paths-from-xml");
@@ -240,15 +237,19 @@ void map_parser::parse_map(Map & map, xml_node const& pt, std::string const& bas
             optional<std::string> font_directory = map_node.get_opt_attr<std::string>("font-directory");
             if (font_directory)
             {
-                extra_attr["font-directory"] = *font_directory;
-                freetype_engine::register_fonts(ensure_relative_to_xml(font_directory), false);
+                if (!freetype_engine::register_fonts(ensure_relative_to_xml(font_directory), false))
+                {
+                    if (strict_)
+                    {
+                        throw config_error(std::string("Failed to load fonts from: ") + *font_directory);
+                    }
+                }
             }
 
             optional<std::string> min_version_string = map_node.get_opt_attr<std::string>("minimum-version");
 
             if (min_version_string)
             {
-                extra_attr["minimum-version"] = *min_version_string;
                 boost::char_separator<char> sep(".");
                 boost::tokenizer<boost::char_separator<char> > tokens(*min_version_string, sep);
                 unsigned i = 0;
@@ -257,13 +258,12 @@ void map_parser::parse_map(Map & map, xml_node const& pt, std::string const& bas
                 for (boost::tokenizer<boost::char_separator<char> >::iterator beg = tokens.begin();
                      beg != tokens.end(); ++beg)
                 {
-                    try
+                    std::string item(*beg);
+                    boost::trim(item);
+                    if (!mapnik::util::string2int(item,n[i]))
                     {
-                        n[i] = boost::lexical_cast<int>(boost::trim_copy(*beg));
-                    }
-                    catch (boost::bad_lexical_cast & ex)
-                    {
-                        std::clog << *beg << " : " << ex.what() << "\n";
+                        throw config_error(std::string("Invalid version string encountered: '")
+                            + *beg + "' in '" + *min_version_string + "'");
                         break;
                     }
                     if (i==2)
@@ -284,8 +284,6 @@ void map_parser::parse_map(Map & map, xml_node const& pt, std::string const& bas
                 }
 
             }
-
-            map.set_extra_attributes(extra_attr);
         }
         catch (const config_error & ex)
         {
@@ -784,7 +782,13 @@ void map_parser::parse_point_symbolizer(rule & rule, xml_node const & sym)
 
                 *file = ensure_relative_to_xml(file);
 
-                symbol.set_filename(parse_path(*file));
+                path_expression_ptr expr(boost::make_shared<path_expression>());
+                if (!parse_path_from_string(expr, *file, sym.get_tree().path_expr_grammar))
+                {
+                    throw mapnik::config_error("Failed to parse path_expression '" + *file + "'");
+                }
+
+                symbol.set_filename(expr);
 
                 if (transform_wkt)
                 {
@@ -867,7 +871,13 @@ void map_parser::parse_markers_symbolizer(rule & rule, xml_node const& sym)
             }
         }
 
-        markers_symbolizer symbol(parse_path(filename));
+        path_expression_ptr expr(boost::make_shared<path_expression>());
+        if (!parse_path_from_string(expr, filename, sym.get_tree().path_expr_grammar))
+        {
+            throw mapnik::config_error("Failed to parse path_expression '" + filename + "'");
+        }
+        markers_symbolizer symbol(expr);
+
         optional<float> opacity = sym.get_opt_attr<float>("opacity");
         if (opacity) symbol.set_opacity(*opacity);
 
@@ -963,8 +973,12 @@ void map_parser::parse_line_pattern_symbolizer(rule & rule, xml_node const & sym
             }
 
             file = ensure_relative_to_xml(file);
-
-            line_pattern_symbolizer symbol(parse_path(file));
+            path_expression_ptr expr(boost::make_shared<path_expression>());
+            if (!parse_path_from_string(expr, file, sym.get_tree().path_expr_grammar))
+            {
+                throw mapnik::config_error("Failed to parse path_expression '" + file + "'");
+            }
+            line_pattern_symbolizer symbol(expr);
 
             parse_metawriter_in_symbolizer(symbol, sym);
             rule.append(symbol);
@@ -1011,7 +1025,12 @@ void map_parser::parse_polygon_pattern_symbolizer(rule & rule,
 
             file = ensure_relative_to_xml(file);
 
-            polygon_pattern_symbolizer symbol(parse_path(file));
+            path_expression_ptr expr(boost::make_shared<path_expression>());
+            if (!parse_path_from_string(expr, file, sym.get_tree().path_expr_grammar))
+            {
+                throw mapnik::config_error("Failed to parse path_expression '" + file + "'");
+            }
+            polygon_pattern_symbolizer symbol(expr);
 
             // pattern alignment
             pattern_alignment_e p_alignment = sym.get_attr<pattern_alignment_e>("alignment",LOCAL_ALIGNMENT);
@@ -1161,7 +1180,12 @@ void map_parser::parse_shield_symbolizer(rule & rule, xml_node const& sym)
             }
 
             image_file = ensure_relative_to_xml(image_file);
-            shield_symbol.set_filename(parse_path(image_file));
+            path_expression_ptr expr(boost::make_shared<path_expression>());
+            if (!parse_path_from_string(expr, image_file, sym.get_tree().path_expr_grammar))
+            {
+                throw mapnik::config_error("Failed to parse path_expression '" + image_file + "'");
+            }
+            shield_symbol.set_filename(expr);
         }
         catch (image_reader_exception const & ex)
         {
@@ -1223,39 +1247,29 @@ void map_parser::parse_stroke(stroke & strk, xml_node const & sym)
     optional<std::string> str = sym.get_opt_attr<std::string>("stroke-dasharray");
     if (str)
     {
-        tokenizer<> tok (*str);
         std::vector<double> dash_array;
-        tokenizer<>::iterator itr = tok.begin();
-        for (; itr != tok.end(); ++itr)
+        if (util::parse_dasharray((*str).begin(),(*str).end(),dash_array))
         {
-            try
+            if (!dash_array.empty())
             {
-                double f = boost::lexical_cast<double>(*itr);
-                dash_array.push_back(f);
-            }
-            catch (boost::bad_lexical_cast &)
-            {
-                throw config_error(std::string("Failed to parse dasharray ") +
-                                   "'. Expected a " +
-                                   "list of floats but got '" + (*str) + "'");
-            }
-        }
-        if (dash_array.size())
-        {
-            size_t size = dash_array.size();
-            if (size % 2)
-            {
-                for (size_t i=0; i < size ;++i)
+                size_t size = dash_array.size();
+                if (size % 2 == 1) 
+                    dash_array.insert(dash_array.end(),dash_array.begin(),dash_array.end());
+                
+                std::vector<double>::const_iterator pos = dash_array.begin();
+                while (pos != dash_array.end())
                 {
-                    dash_array.push_back(dash_array[i]);
+                    if (*pos > 0.0 || *(pos+1) > 0.0) // avoid both dash and gap eq 0.0                        
+                        strk.add_dash(*pos,*(pos + 1));
+                    pos +=2;
                 }
-            }
-            std::vector<double>::const_iterator pos = dash_array.begin();
-            while (pos != dash_array.end())
-            {
-                strk.add_dash(*pos,*(pos + 1));
-                pos +=2;
-            }
+            }   
+        }
+        else
+        {
+            throw config_error(std::string("Failed to parse dasharray ") +
+                               "'. Expected a " +
+                               "list of floats or 'none' but got '" + (*str) + "'");
         }
     }
 }
