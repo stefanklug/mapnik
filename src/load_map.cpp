@@ -391,7 +391,43 @@ void map_parser::parse_map_include( Map & map, ptree const & include )
         }
         else if (v.first == "Parameters")
         {
-            // do not throw in order to support Mapnik 2.1.x stylesheets
+            std::string name = get_attr(v.second, "name", std::string("Unnamed"));
+            parameters & params = map.get_extra_parameters();
+            ptree::const_iterator paramIter = v.second.begin();
+            ptree::const_iterator endParam = v.second.end();
+            for (; paramIter != endParam; ++paramIter)
+            {
+                if (paramIter->first == "Parameter")
+                {
+                    ptree const& param = paramIter->second;
+                    std::string name = get_attr<std::string>(param, "name");
+                    bool is_string = true;
+                    boost::optional<std::string> type = get_opt_attr<std::string>(param,"type");
+                    std::string value = get_value<std::string>( param, "parameter" );
+                    if (type)
+                    {
+                        if (*type == "int")
+                        {
+                            is_string = false;
+                            try {
+                                params[name] = boost::lexical_cast<int>(value);
+                            } catch (...) {}
+                        }
+                        else if (*type == "float")
+                        {
+                            is_string = false;
+                            try {
+                                params[name] = boost::lexical_cast<double>(value);
+                            } catch (...) {}
+                        }
+                    }
+
+                    if (is_string)
+                    {
+                        params[name] = value;
+                    }
+                }
+            }
         }
         else if (v.first != "<xmlcomment>" &&
                  v.first != "<xmlattr>")
