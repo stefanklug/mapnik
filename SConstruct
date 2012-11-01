@@ -1719,6 +1719,7 @@ if not HELP_REQUESTED:
             SConscript('utils/pgsql2sqlite/build.py')
 
         SConscript('utils/svg2png/build.py')
+        SConscript('utils/map2svg/build.py')
 
         # devtools not ready for public
         #SConscript('utils/ogrindex/build.py')

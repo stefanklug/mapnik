@@ -27,6 +27,7 @@
 #include <mapnik/debug.hpp>
 #include <mapnik/box2d.hpp>
 #include <mapnik/vertex.hpp>
+#include <mapnik/geometry.hpp> // only for eGeomType
 #include <mapnik/proj_transform.hpp>
 
 // stl
@@ -98,6 +99,11 @@ struct MAPNIK_DECL coord_transform
     void rewind(unsigned pos) const
     {
         geom_.rewind(pos);
+    }
+
+    eGeomType type() const
+    {
+        return geom_.type();
     }
 
     Geometry const& geom() const
