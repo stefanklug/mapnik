@@ -24,7 +24,7 @@
 #define OCCI_FEATURESET_HPP
 
 // mapnik
-#include <mapnik/datasource.hpp>
+#include <mapnik/feature.hpp>
 #include <mapnik/geometry.hpp>
 #include <mapnik/unicode.hpp>
 

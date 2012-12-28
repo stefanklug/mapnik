@@ -28,6 +28,7 @@
 
 #include <mapnik/debug.hpp>
 #include <mapnik/layer.hpp>
+#include <mapnik/label_collision_detector.hpp>
 #include <mapnik/feature_type_style.hpp>
 #include <mapnik/marker.hpp>
 #include <mapnik/marker_cache.hpp>

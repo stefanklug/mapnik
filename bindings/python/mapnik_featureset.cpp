@@ -65,7 +65,6 @@ inline mapnik::feature_ptr next(mapnik::featureset_ptr const& itr)
 void export_featureset()
 {
     using namespace boost::python;
-    using mapnik::Feature;
     using mapnik::Featureset;
 
     class_<Featureset,boost::shared_ptr<Featureset>,

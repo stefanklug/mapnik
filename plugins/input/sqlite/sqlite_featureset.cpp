@@ -38,7 +38,6 @@
 
 using mapnik::query;
 using mapnik::box2d;
-using mapnik::Feature;
 using mapnik::feature_ptr;
 using mapnik::geometry_utils;
 using mapnik::transcoder;
@@ -104,7 +103,7 @@ feature_ptr sqlite_featureset::next()
             {
             case SQLITE_INTEGER:
             {
-                feature->put<mapnik::value_integer>(fld_name_str, rs_->column_integer64(i));
+                feature->put(fld_name_str, static_cast<mapnik::value_integer>(rs_->column_integer64(i)));
                 break;
             }
 

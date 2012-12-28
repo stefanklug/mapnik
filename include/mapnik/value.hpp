@@ -24,6 +24,7 @@
 #define MAPNIK_VALUE_HPP
 
 // mapnik
+#include <mapnik/value_types.hpp>
 #include <mapnik/global.hpp>
 #include <mapnik/unicode.hpp>
 #include <mapnik/util/conversions.hpp>
@@ -68,56 +69,6 @@ inline void to_utf8(UnicodeString const& input, std::string & target)
         target.assign(buf, len);
     }
 }
-
-struct value_null
-{
-    template <typename T>
-    value_null operator+ (T const& other) const
-    {
-        boost::ignore_unused_variable_warning(other);
-        return *this;
-    }
-
-    template <typename T>
-    value_null operator- (T const& other) const
-    {
-        boost::ignore_unused_variable_warning(other);
-        return *this;
-    }
-
-    template <typename T>
-    value_null operator* (T const& other) const
-    {
-        boost::ignore_unused_variable_warning(other);
-        return *this;
-    }
-
-    template <typename T>
-    value_null operator/ (T const& other) const
-    {
-        boost::ignore_unused_variable_warning(other);
-        return *this;
-    }
-
-    template <typename T>
-    value_null operator% (T const& other) const
-    {
-        boost::ignore_unused_variable_warning(other);
-        return *this;
-    }
-};
-
-#define BIGINT
-
-#ifdef BIGINT
-typedef long long value_integer;
-#else
-typedef int value_integer;
-#endif
-
-typedef double value_double;
-typedef UnicodeString  value_unicode_string;
-typedef bool value_bool;
 
 typedef boost::variant<value_null,value_bool,value_integer,value_double,value_unicode_string> value_base;
 
@@ -798,11 +749,7 @@ struct to_int : public boost::static_visitor<value_integer>
     value_integer operator() (std::string const& val) const
     {
         value_integer result;
-#ifdef BIGINT
-        if (util::string2longlong(val,result))
-#else
         if (util::string2int(val,result))
-#endif
             return result;
         return value_integer(0);
     }
@@ -912,7 +859,6 @@ public:
     {
         return boost::apply_visitor(impl::to_int(),base_);
     }
-
 };
 
 inline const value operator+(value const& p1,value const& p2)
@@ -993,6 +939,8 @@ struct is_null : public boost::static_visitor<bool>
 
 // constant visitor instance substitutes overloaded function
 impl::is_null const is_null = impl::is_null();
+
+static const value default_value;
 
 inline bool value::is_null() const
 {

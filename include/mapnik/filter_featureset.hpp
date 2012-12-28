@@ -25,6 +25,7 @@
 
 // mapnik
 #include <mapnik/datasource.hpp>
+#include <mapnik/feature.hpp>
 
 namespace mapnik {
 

@@ -28,13 +28,13 @@
 
 // mapnik
 #include <mapnik/rule.hpp>
+#include <mapnik/symbolizer_types.hpp>
 #include <mapnik/expression.hpp>
 #include <mapnik/expression_string.hpp>
 
 using mapnik::rule;
 using mapnik::expr_node;
 using mapnik::expression_ptr;
-using mapnik::Feature;
 using mapnik::point_symbolizer;
 using mapnik::line_symbolizer;
 using mapnik::line_pattern_symbolizer;
@@ -62,8 +62,8 @@ void export_rule()
     implicitly_convertible<text_symbolizer,symbolizer>();
     implicitly_convertible<markers_symbolizer,symbolizer>();
 
-    class_<rule::symbolizers>("Symbolizers",init<>("TODO"))
-        .def(vector_indexing_suite<rule::symbolizers>())
+    class_<mapnik::symbolizers>("Symbolizers",init<>("TODO"))
+        .def(vector_indexing_suite<mapnik::symbolizers>())
         ;
 
     class_<rule>("Rule",init<>("default constructor"))

@@ -30,7 +30,7 @@
 #include <mapnik/box2d.hpp>
 #include <mapnik/grid/grid_view.hpp>
 #include <mapnik/global.hpp>
-#include <mapnik/value.hpp>
+#include <mapnik/value_types.hpp>
 #include <mapnik/feature.hpp>
 #include <mapnik/feature_factory.hpp>
 #include <mapnik/util/conversions.hpp>

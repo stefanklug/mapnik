@@ -24,7 +24,7 @@
 #define OGR_FEATURESET_HPP
 
 // mapnik
-#include <mapnik/datasource.hpp>
+#include <mapnik/feature.hpp>
 #include <mapnik/unicode.hpp>
 #include <mapnik/geom_util.hpp>
 

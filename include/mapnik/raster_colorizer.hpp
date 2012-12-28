@@ -197,7 +197,7 @@ public:
     //!
     //! \param[in, out] raster A raster stored in float32 single channel format, which gets colorized in place.
     //! \param[in] feature used to find 'NODATA' information if available
-    void colorize(raster_ptr const& raster, Feature const& f) const;
+    void colorize(raster_ptr const& raster, feature_impl const& f) const;
 
 
     //! \brief Perform the translation of input to output

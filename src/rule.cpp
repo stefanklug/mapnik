@@ -23,6 +23,12 @@
 // mapnik
 #include <mapnik/rule.hpp>
 #include <mapnik/raster_colorizer.hpp>
+#include <mapnik/expression_string.hpp>
+
+// boost
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/concept_check.hpp>
 
 namespace {
 
@@ -176,27 +182,27 @@ void rule::remove_at(size_t index)
     }
 }
 
-rule::symbolizers const& rule::get_symbolizers() const
+symbolizers const& rule::get_symbolizers() const
 {
     return syms_;
 }
 
-rule::symbolizers::const_iterator rule::begin() const
+symbolizers::const_iterator rule::begin() const
 {
     return syms_.begin();
 }
 
-rule::symbolizers::const_iterator rule::end() const
+symbolizers::const_iterator rule::end() const
 {
     return syms_.end();
 }
 
-rule::symbolizers::iterator rule::begin()
+symbolizers::iterator rule::begin()
 {
     return syms_.begin();
 }
 
-rule::symbolizers::iterator rule::end()
+symbolizers::iterator rule::end()
 {
     return syms_.end();
 }

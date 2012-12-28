@@ -26,6 +26,7 @@
 // mapnik
 #include <mapnik/feature.hpp>
 #include <mapnik/geom_util.hpp>
+
 // boost
 #include <boost/foreach.hpp>
 
@@ -38,7 +39,7 @@ public:
           y_(y),
           tol_(tol) {}
 
-    bool pass(Feature & feature)
+    bool pass(feature_impl & feature)
     {
         BOOST_FOREACH(geometry_type & geom, feature.paths())
         {

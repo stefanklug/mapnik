@@ -23,12 +23,16 @@
 
 // mapnik
 #include <mapnik/geometry.hpp>
+#include <mapnik/feature.hpp>
 #include <mapnik/feature_factory.hpp>
 #include <mapnik/debug.hpp>
+#include <mapnik/unicode.hpp>
+
+// boost
+#include <boost/make_shared.hpp>
 
 #include "osm_featureset.hpp"
 
-using mapnik::Feature;
 using mapnik::feature_ptr;
 using mapnik::geometry_type;
 using mapnik::feature_factory;
@@ -115,9 +119,10 @@ feature_ptr osm_featureset<filterT>::next()
         if (i != end_keyvals)
         {
             feature->put_new(i->first, tr_->transcode(i->second.c_str()));
-        } else
+        }
+        else
         {
-            feature->put_new(*itr, "");
+            feature->put_new(*itr, tr_->transcode(""));
         }
     }
     return feature;

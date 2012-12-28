@@ -23,6 +23,9 @@
 #ifndef MAPNIK_SQL_UTILS_HPP
 #define MAPNIK_SQL_UTILS_HPP
 
+// mapnik
+#include <mapnik/global.hpp>
+
 // boost
 #include <boost/algorithm/string.hpp>
 #include <boost/scoped_array.hpp>

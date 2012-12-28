@@ -26,7 +26,7 @@
 #include <mapnik/image_data.hpp>
 #include <mapnik/box2d.hpp>
 #include <mapnik/global.hpp>
-#include <mapnik/value.hpp>
+#include <mapnik/value_types.hpp>
 #include <mapnik/feature.hpp>
 #include <mapnik/datasource.hpp> // for feature_ptr
 

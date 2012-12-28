@@ -32,6 +32,7 @@
 #include <mapnik/line_pattern_symbolizer.hpp>
 #include <mapnik/vertex_converters.hpp>
 #include <mapnik/noncopyable.hpp>
+#include <mapnik/parse_path.hpp>
 
 // agg
 #include "agg_basics.h"

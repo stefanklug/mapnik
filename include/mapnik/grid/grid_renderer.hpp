@@ -27,28 +27,25 @@
 #include <mapnik/config.hpp>
 #include <mapnik/feature_style_processor.hpp>
 #include <mapnik/font_engine_freetype.hpp>
-#include <mapnik/label_collision_detector.hpp>
-#include <mapnik/map.hpp>
-#include <mapnik/rule.hpp> // for all symbolizers
+#include <mapnik/symbolizer_types.hpp>
 #include <mapnik/grid/grid.hpp>
 #include <mapnik/noncopyable.hpp>
 
 // boost
 #include <boost/scoped_ptr.hpp>
 
-// FIXME
-// forward declare so that
-// apps using mapnik do not
-// need agg headers
-namespace agg {
-struct trans_affine;
-}
+namespace agg { struct trans_affine; }
+namespace mapnik { class Map; }
+namespace mapnik { class feature_impl; }
+namespace mapnik { class feature_type_style; }
+namespace mapnik { class label_collision_detector4; }
+namespace mapnik { class layer; }
+namespace mapnik { class marker; }
+namespace mapnik { class proj_transform; }
+namespace mapnik { struct grid_rasterizer; }
+struct pixel_position;
 
 namespace mapnik {
-
-class marker;
-
-struct grid_rasterizer;
 
 template <typename T>
 class MAPNIK_DECL grid_renderer : public feature_style_processor<grid_renderer<T> >,
@@ -98,7 +95,7 @@ public:
     void process(markers_symbolizer const& sym,
                  mapnik::feature_impl & feature,
                  proj_transform const& prj_trans);
-    inline bool process(rule::symbolizers const& /*syms*/,
+    inline bool process(symbolizers const& /*syms*/,
                         mapnik::feature_impl & /*feature*/,
                         proj_transform const& /*prj_trans*/)
     {

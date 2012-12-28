@@ -33,7 +33,9 @@
 
 #include "kismet_featureset.hpp"
 
-using mapnik::Feature;
+// boost
+#include <boost/make_shared.hpp>
+
 using mapnik::feature_ptr;
 using mapnik::geometry_type;
 using mapnik::geometry_utils;

@@ -33,8 +33,32 @@
         boost::spirit::domain_::domain, name##_expr_type);      \
     BOOST_AUTO(name, boost::proto::deep_copy(expr));            \
 
+#include <cmath> // log10
 
-namespace mapnik { namespace util {
+// boost
+#include <boost/version.hpp>
+#include <boost/math/special_functions/trunc.hpp> // trunc to avoid needing C++11
+
+#if BOOST_VERSION >= 104500
+#include <boost/config/warning_disable.hpp>
+#include <boost/spirit/include/karma.hpp>
+#else
+#include <boost/lexical_cast.hpp>
+#endif
+
+// params
+#include <mapnik/boolean.hpp>
+#include <mapnik/util/conversions.hpp>
+#include <mapnik/params.hpp>
+#include <boost/variant/static_visitor.hpp>
+#include <boost/variant/apply_visitor.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/none.hpp>
+#include <boost/optional.hpp>
+
+namespace mapnik { 
+
+namespace util {
 
 using namespace boost::spirit;
 
@@ -127,5 +151,292 @@ bool string2float(const char * value, float & result)
     return r && (iter == end);
 }
 
+
+#if BOOST_VERSION >= 104500
+
+bool to_string(std::string & str, int value)
+{
+  namespace karma = boost::spirit::karma;
+  std::back_insert_iterator<std::string> sink(str);
+  return karma::generate(sink, value);
 }
+
+bool to_string(std::string & str, unsigned value)
+{
+  namespace karma = boost::spirit::karma;
+  std::back_insert_iterator<std::string> sink(str);
+  return karma::generate(sink, value);
+}
+
+bool to_string(std::string & str, bool value)
+{
+  namespace karma = boost::spirit::karma;
+  std::back_insert_iterator<std::string> sink(str);
+  return karma::generate(sink, value);
+}
+
+bool to_string(std::string & str, boost::long_long_type value)
+{
+  namespace karma = boost::spirit::karma;
+  std::back_insert_iterator<std::string> sink(str);
+  return karma::generate(sink, value);
+}
+
+namespace detail {
+  template <typename T>
+  struct double_policy : boost::spirit::karma::real_policies<T>
+  {
+      typedef boost::spirit::karma::real_policies<T> base_type;
+
+      static int floatfield(T n) {
+        using namespace boost::spirit; // for traits
+
+        if (traits::test_zero(n))
+            return base_type::fmtflags::fixed;
+
+        T abs_n = traits::get_absolute_value(n);
+        return (abs_n >= 1e16 || abs_n < 1e-4)
+          ? base_type::fmtflags::scientific : base_type::fmtflags::fixed;
+      }
+
+      static unsigned precision(T n) {
+        if ( n == 0.0 ) return 0;
+        using namespace boost::spirit; // for traits
+        return static_cast<unsigned>(15 - boost::math::trunc(log10(traits::get_absolute_value(n))));
+      }
+
+      template <typename OutputIterator>
+      static bool dot(OutputIterator& sink, T n, unsigned precision) {
+        if (n == 0.0) return true; // avoid trailing zeroes
+        return base_type::dot(sink, n, precision);
+      }
+
+      template <typename OutputIterator>
+      static bool fraction_part (OutputIterator& sink, T n
+        , unsigned precision_, unsigned precision)
+      {
+          // NOTE: copied from karma only to avoid trailing zeroes
+          //       (maybe a bug ?)
+
+          // allow for ADL to find the correct overload for floor and log10
+          using namespace std;
+
+          using namespace boost::spirit; // for traits
+          using namespace boost::spirit::karma; // for char_inserter
+          using namespace boost; // for remove_const
+
+          if ( traits::test_zero(n) ) return true; // this part added to karma
+
+          // The following is equivalent to:
+          //    generate(sink, right_align(precision, '0')[ulong], n);
+          // but it's spelled out to avoid inter-modular dependencies.
+
+          typename remove_const<T>::type digits =
+              (traits::test_zero(n) ? 0 : floor(log10(n))) + 1;
+          bool r = true;
+          for (/**/; r && digits < precision_; digits = digits + 1)
+              r = char_inserter<>::call(sink, '0');
+          if (precision && r)
+              r = int_inserter<10>::call(sink, n);
+          return r;
+      }
+
+      template <typename CharEncoding, typename Tag, typename OutputIterator>
+      static bool exponent (OutputIterator& sink, long n)
+      {
+          // NOTE: copied from karma to force sign in exponent
+          const bool force_sign = true;
+
+          using namespace boost::spirit; // for traits
+          using namespace boost::spirit::karma; // for char_inserter, sign_inserter
+
+          unsigned long abs_n = traits::get_absolute_value(n);
+          bool r = char_inserter<CharEncoding, Tag>::call(sink, 'e') &&
+                   sign_inserter::call(sink, traits::test_zero(n)
+                      , traits::test_negative(n), force_sign);
+
+          // the C99 Standard requires at least two digits in the exponent
+          if (r && abs_n < 10)
+              r = char_inserter<CharEncoding, Tag>::call(sink, '0');
+          return r && int_inserter<10>::call(sink, abs_n);
+      }
+
+  };
+}
+
+bool to_string(std::string & str, double value)
+{
+    namespace karma = boost::spirit::karma;
+    typedef karma::real_generator<double, detail::double_policy<double> > double_type;
+    std::back_insert_iterator<std::string> sink(str);
+    return karma::generate(sink, double_type(), value);
+}
+
+#else
+
+template <typename T>
+bool to_string_lexical(std::string & str, T value)
+{
+    try
+    {
+        str = boost::lexical_cast<T>(value);
+        return true;
+    }
+    catch (std::exception const& ex)
+    {
+        return false;
+    }
+}
+
+bool to_string(std::string & str, int value)
+{
+  return to_string_lexical(str, value);
+}
+
+bool to_string(std::string & str, unsigned value)
+{
+  return to_string_lexical(str, value);
+}
+
+bool to_string(std::string & str, bool value)
+{
+  return to_string_lexical(str, value);
+}
+
+bool to_string(std::string & str, double value)
+{
+  return to_string_lexical(str, value);
+}
+
+bool to_string(std::string & str, boost::long_long_type value)
+{
+  return to_string_lexical(str, value);
+}
+
+#endif
+
+} // end namespace util
+
+namespace params_detail {
+
+    // TODO - rewrite to avoid usage of lexical_cast
+    template <typename T>
+    struct value_extractor_visitor : public boost::static_visitor<>
+    {
+        value_extractor_visitor(boost::optional<T> & var)
+            :var_(var) {}
+    
+        void operator () (T val) const
+        {
+            var_ = val;
+        }
+
+        template <typename T1>
+        void operator () (T1 val) const
+        {
+            try
+            {
+                var_ = boost::lexical_cast<T>(val);
+            }
+            catch (boost::bad_lexical_cast & ) {}
+        }
+    
+        boost::optional<T> & var_;
+    };
+    
+    template <typename T>
+    struct converter
+    {
+        typedef boost::optional<T> return_type;
+        static return_type extract(parameters const& params,
+                                   std::string const& name,
+                                   boost::optional<T> const& default_value)
+        {
+            boost::optional<T> result(default_value);
+            parameters::const_iterator itr = params.find(name);
+            if (itr != params.end())
+            {
+                boost::apply_visitor(value_extractor_visitor<T>(result),itr->second);
+            }
+            return result;
+        }
+    };
+} // end namespace params_detail
+
+// parameters
+
+parameters::parameters() {}
+
+
+// std::string
+template <>
+boost::optional<std::string> parameters::get(std::string const& key) const
+{
+    return params_detail::converter<std::string>::extract(*this,key, boost::none);
+}
+
+template <>
+boost::optional<std::string> parameters::get(std::string const& key,
+                                             std::string const& default_value) const
+{
+    return params_detail::converter<std::string>::extract(*this,key,boost::optional<std::string>(default_value));
+}
+
+// double
+template <>
+boost::optional<value_double> parameters::get(std::string const& key) const
+{
+    return params_detail::converter<value_double>::extract(*this,key, boost::none);
+}
+
+template <>
+boost::optional<value_double> parameters::get(std::string const& key,
+                                             double const& default_value) const
+{
+    return params_detail::converter<value_double>::extract(*this,key,boost::optional<value_double>(default_value));
+}
+
+// int
+template <>
+boost::optional<int> parameters::get(std::string const& key) const
+{
+    return params_detail::converter<int>::extract(*this,key, boost::none);
+}
+
+template <>
+boost::optional<int> parameters::get(std::string const& key,
+                                             int const& default_value) const
+{
+    return params_detail::converter<int>::extract(*this,key,boost::optional<int>(default_value));
+}
+
+// int
+template <>
+boost::optional<value_integer> parameters::get(std::string const& key) const
+{
+    return params_detail::converter<value_integer>::extract(*this,key, boost::none);
+}
+
+template <>
+boost::optional<value_integer> parameters::get(std::string const& key,
+                                             value_integer const& default_value) const
+{
+    return params_detail::converter<value_integer>::extract(*this,key,boost::optional<value_integer>(default_value));
+}
+
+
+// mapnik::boolean
+template <>
+boost::optional<mapnik::boolean> parameters::get(std::string const& key) const
+{
+    return params_detail::converter<mapnik::boolean>::extract(*this,key, boost::none);
+}
+
+template <>
+boost::optional<mapnik::boolean> parameters::get(std::string const& key,
+                                             mapnik::boolean const& default_value) const
+{
+    return params_detail::converter<mapnik::boolean>::extract(*this,key,boost::optional<mapnik::boolean>(default_value));
+}
+
 }

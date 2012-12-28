@@ -26,8 +26,11 @@
 //    the template with the desired template arguments.
 
 // mapnik
+#include <mapnik/map.hpp>
+#include <mapnik/feature.hpp>
 #include <mapnik/feature_style_processor.hpp>
 #include <mapnik/query.hpp>
+#include <mapnik/feature.hpp>
 #include <mapnik/feature_type_style.hpp>
 #include <mapnik/box2d.hpp>
 #include <mapnik/datasource.hpp>
@@ -407,7 +410,7 @@ void feature_style_processor<Processor>::apply_to_layer(layer const& lay, Proces
                     ds->type() == datasource::Raster &&
                     ds->params().get<double>("filter_factor",0.0) == 0.0)
                 {
-                    BOOST_FOREACH (rule::symbolizers::value_type sym,  r.get_symbolizers())
+                    BOOST_FOREACH (symbolizers::value_type sym,  r.get_symbolizers())
                     {
                         // if multiple raster symbolizers, last will be respected
                         // should we warn or throw?
@@ -543,7 +546,7 @@ void feature_style_processor<Processor>::render_style(
         BOOST_FOREACH(rule * r, style->get_if_rules(scale_denom) )
         {
             expression_ptr const& expr=r->get_filter();
-            value_type result = boost::apply_visitor(evaluate<Feature,value_type>(*feature),*expr);
+            value_type result = boost::apply_visitor(evaluate<feature_impl,value_type>(*feature),*expr);
             if (result.to_bool())
             {
 #if defined(RENDERING_STATS)
@@ -554,7 +557,7 @@ void feature_style_processor<Processor>::render_style(
 
                 do_else=false;
                 do_also=true;
-                rule::symbolizers const& symbols = r->get_symbolizers();
+                symbolizers const& symbols = r->get_symbolizers();
 
                 // if the underlying renderer is not able to process the complete set of symbolizers,
                 // process one by one.
@@ -583,7 +586,7 @@ void feature_style_processor<Processor>::render_style(
 
                 p.painted(true);
 
-                rule::symbolizers const& symbols = r->get_symbolizers();
+                symbolizers const& symbols = r->get_symbolizers();
                 // if the underlying renderer is not able to process the complete set of symbolizers,
                 // process one by one.
                 if(!p.process(symbols,*feature,prj_trans))
@@ -605,7 +608,7 @@ void feature_style_processor<Processor>::render_style(
 
                 p.painted(true);
 
-                rule::symbolizers const& symbols = r->get_symbolizers();
+                symbolizers const& symbols = r->get_symbolizers();
                 // if the underlying renderer is not able to process the complete set of symbolizers,
                 // process one by one.
                 if(!p.process(symbols,*feature,prj_trans))

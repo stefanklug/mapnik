@@ -35,6 +35,8 @@
 #include <mapnik/image_compositing.hpp>
 #include <mapnik/image_scaling.hpp>
 #include <mapnik/image_filter_types.hpp>
+#include <mapnik/parse_path.hpp>
+
 // boost
 #include <boost/algorithm/string.hpp>
 #include <boost/optional.hpp>
@@ -551,8 +553,8 @@ void serialize_rule( ptree & style_node, const rule & r, bool explicit_defaults)
         max_scale.put_value( r.get_max_scale() );
     }
 
-    rule::symbolizers::const_iterator begin = r.get_symbolizers().begin();
-    rule::symbolizers::const_iterator end = r.get_symbolizers().end();
+    symbolizers::const_iterator begin = r.get_symbolizers().begin();
+    symbolizers::const_iterator end = r.get_symbolizers().end();
     serialize_symbolizer serializer( rule_node, explicit_defaults);
     std::for_each( begin, end , boost::apply_visitor( serializer ));
 }

@@ -29,6 +29,7 @@
 #include <mapnik/svg/output/svg_generator.hpp>
 #include <mapnik/svg/output/svg_output_attributes.hpp>
 #include <mapnik/noncopyable.hpp>
+#include <mapnik/symbolizer_types.hpp>
 
 // stl
 #include <string>
@@ -95,7 +96,7 @@ public:
      * @brief Overload that process the whole set of symbolizers of a rule.
      * @return true, meaning that this renderer can process multiple symbolizers.
      */
-    bool process(rule::symbolizers const& syms,
+    bool process(symbolizers const& syms,
                  mapnik::feature_impl & feature,
                  proj_transform const& prj_trans);
 

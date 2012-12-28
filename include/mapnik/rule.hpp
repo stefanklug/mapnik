@@ -24,6 +24,7 @@
 #define MAPNIK_RULE_HPP
 
 // mapnik
+#include <mapnik/symbolizer_types.hpp>
 #include <mapnik/building_symbolizer.hpp>
 #include <mapnik/line_symbolizer.hpp>
 #include <mapnik/line_pattern_symbolizer.hpp>
@@ -35,16 +36,8 @@
 #include <mapnik/text_symbolizer.hpp>
 #include <mapnik/markers_symbolizer.hpp>
 #include <mapnik/debug_symbolizer.hpp>
-#include <mapnik/feature.hpp>
 #include <mapnik/expression.hpp>
-#include <mapnik/expression_string.hpp>
 #include <mapnik/config.hpp> // MAPNIK_DECL
-
-// boost
-#include <boost/concept_check.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
-#include <boost/variant.hpp>
 
 // stl
 #include <string>
@@ -116,22 +109,8 @@ inline bool operator==(debug_symbolizer const& lhs,
     return (&lhs == &rhs);
 }
 
-typedef boost::variant<point_symbolizer,
-                       line_symbolizer,
-                       line_pattern_symbolizer,
-                       polygon_symbolizer,
-                       polygon_pattern_symbolizer,
-                       raster_symbolizer,
-                       shield_symbolizer,
-                       text_symbolizer,
-                       building_symbolizer,
-                       markers_symbolizer,
-                       debug_symbolizer> symbolizer;
-
 class MAPNIK_DECL rule
 {
-public:
-    typedef std::vector<symbolizer> symbolizers;
 private:
 
     std::string name_;

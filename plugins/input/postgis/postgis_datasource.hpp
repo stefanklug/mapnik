@@ -31,6 +31,8 @@
 #include <mapnik/box2d.hpp>
 #include <mapnik/coord.hpp>
 #include <mapnik/feature_layer_desc.hpp>
+#include <mapnik/unicode.hpp>
+#include <mapnik/value_types.hpp>
 
 // boost
 #include <boost/optional.hpp>
@@ -87,8 +89,8 @@ private:
     std::string geometry_table_;
     const std::string geometry_field_;
     std::string key_field_;
-    const int cursor_fetch_size_;
-    const int row_limit_;
+    mapnik::value_integer cursor_fetch_size_;
+    mapnik::value_integer row_limit_;
     std::string geometryColumn_;
     mapnik::datasource::datasource_t type_;
     int srid_;

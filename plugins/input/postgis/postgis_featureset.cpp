@@ -95,7 +95,7 @@ feature_ptr postgis_featureset::next()
             // TODO - extend feature class to know
             // that its id is also an attribute to avoid
             // this duplication
-            feature->put<mapnik::value_integer>(name,val);
+            feature->put(name,static_cast<mapnik::value_integer>(val));
             ++pos;
         }
         else
@@ -136,19 +136,19 @@ feature_ptr postgis_featureset::next()
 
                     case 23: //int4
                     {
-                        feature->put<mapnik::value_integer>(name, int4net(buf));
+                        feature->put(name, static_cast<mapnik::value_integer>(int4net(buf)));
                         break;
                     }
 
                     case 21: //int2
                     {
-                        feature->put<mapnik::value_integer>(name, int2net(buf));
+                        feature->put(name, static_cast<mapnik::value_integer>(int2net(buf)));
                         break;
                     }
 
                     case 20: //int8/BigInt
                     {
-                        feature->put<mapnik::value_integer>(name, int8net(buf));
+                        feature->put(name, static_cast<mapnik::value_integer>(int8net(buf)));
                         break;
                     }
 
@@ -156,7 +156,7 @@ feature_ptr postgis_featureset::next()
                     {
                         float val;
                         float4net(val, buf);
-                        feature->put(name, val);
+                        feature->put(name, static_cast<double>(val));
                         break;
                     }
 

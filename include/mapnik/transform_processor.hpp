@@ -225,7 +225,7 @@ struct transform_processor
     }
 };
 
-typedef mapnik::transform_processor<Feature> transform_processor_type;
+typedef mapnik::transform_processor<feature_impl> transform_processor_type;
 
 } // namespace mapnik
 

@@ -32,6 +32,7 @@
 
 // mapnik
 #include <mapnik/debug.hpp>
+#include <mapnik/unicode.hpp>
 #include <mapnik/feature_layer_desc.hpp>
 #include <mapnik/feature_factory.hpp>
 #include <mapnik/geometry.hpp>
@@ -42,6 +43,7 @@
 #include <mapnik/util/conversions.hpp>
 #include <mapnik/boolean.hpp>
 #include <mapnik/util/trim.hpp>
+#include <mapnik/value_types.hpp>
 
 // stl
 #include <sstream>
@@ -63,7 +65,7 @@ csv_datasource::csv_datasource(parameters const& params)
       filename_(),
       inline_string_(),
       file_length_(0),
-      row_limit_(*params.get<int>("row_limit", 0)),
+      row_limit_(*params.get<mapnik::value_integer>("row_limit", 0)),
       features_(),
       escape_(*params.get<std::string>("escape", "")),
       separator_(*params.get<std::string>("separator", "")),
@@ -72,7 +74,7 @@ csv_datasource::csv_datasource(parameters const& params)
       manual_headers_(mapnik::util::trim_copy(*params.get<std::string>("headers", ""))),
       strict_(*params.get<mapnik::boolean>("strict", false)),
       quiet_(*params.get<mapnik::boolean>("quiet", false)),
-      filesize_max_(*params.get<float>("filesize_max", 20.0)),  // MB
+      filesize_max_(*params.get<double>("filesize_max", 20.0)),  // MB
       ctx_(boost::make_shared<mapnik::context_type>())
 {
     /* TODO:

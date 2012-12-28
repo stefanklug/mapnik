@@ -21,6 +21,7 @@
  *****************************************************************************/
 
 // mapnik
+#include <mapnik/value_types.hpp>
 #include <mapnik/global.hpp>
 #include <mapnik/debug.hpp>
 #include <mapnik/datasource.hpp>
@@ -43,7 +44,6 @@
 
 using mapnik::query;
 using mapnik::box2d;
-using mapnik::Feature;
 using mapnik::feature_ptr;
 using mapnik::geometry_utils;
 using mapnik::transcoder;
@@ -126,7 +126,7 @@ feature_ptr ogr_index_featureset<filterT>::next()
             {
             case OFTInteger:
             {
-                feature->put<mapnik::value_integer>(fld_name,poFeature->GetFieldAsInteger (i));
+                feature->put(fld_name,static_cast<mapnik::value_integer>(poFeature->GetFieldAsInteger (i)));
                 break;
             }
 
