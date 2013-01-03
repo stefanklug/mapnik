@@ -95,6 +95,7 @@ namespace {
     };
 
 }
+
 namespace mapnik
 {
 
@@ -103,6 +104,7 @@ bool operator==(point_symbolizer const& lhs,
 {
     return (&lhs == &rhs);
 }
+
 bool operator==(line_symbolizer const& lhs,
                 line_symbolizer const& rhs)
 {

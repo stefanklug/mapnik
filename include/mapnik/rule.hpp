@@ -50,37 +50,37 @@ namespace mapnik
 {
 
 
-inline bool operator==(point_symbolizer const& lhs,
+bool operator==(point_symbolizer const& lhs,
                        point_symbolizer const& rhs);
 
-inline bool operator==(line_symbolizer const& lhs,
+bool operator==(line_symbolizer const& lhs,
                        line_symbolizer const& rhs);
 
-inline bool operator==(line_pattern_symbolizer const& lhs,
+bool operator==(line_pattern_symbolizer const& lhs,
                        line_pattern_symbolizer const& rhs);
 
-inline bool operator==(polygon_symbolizer const& lhs,
+bool operator==(polygon_symbolizer const& lhs,
                        polygon_symbolizer const& rhs);
 
-inline bool operator==(polygon_pattern_symbolizer const& lhs,
+bool operator==(polygon_pattern_symbolizer const& lhs,
                        polygon_pattern_symbolizer const& rhs);
 
-inline bool operator==(raster_symbolizer const& lhs,
+bool operator==(raster_symbolizer const& lhs,
                        raster_symbolizer const& rhs);
 
-inline bool operator==(text_symbolizer const& lhs,
+bool operator==(text_symbolizer const& lhs,
                        text_symbolizer const& rhs);
 
-inline bool operator==(shield_symbolizer const& lhs,
+bool operator==(shield_symbolizer const& lhs,
                        shield_symbolizer const& rhs);
 
-inline bool operator==(building_symbolizer const& lhs,
+bool operator==(building_symbolizer const& lhs,
                        building_symbolizer const& rhs);
 
-inline bool operator==(markers_symbolizer const& lhs,
+bool operator==(markers_symbolizer const& lhs,
                        markers_symbolizer const& rhs);
 
-inline bool operator==(debug_symbolizer const& lhs,
+bool operator==(debug_symbolizer const& lhs,
                        debug_symbolizer const& rhs);
 
 class MAPNIK_DECL rule
