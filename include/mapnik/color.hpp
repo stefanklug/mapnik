@@ -28,6 +28,7 @@
 #include <mapnik/global.hpp>
 
 //boost
+#include <boost/cstdint.hpp>
 #include <boost/operators.hpp>
 
 // stl
@@ -39,10 +40,10 @@ class MAPNIK_DECL color
     : boost::equality_comparable<color>
 {
 private:
-    unsigned char red_;
-    unsigned char green_;
-    unsigned char blue_;
-    unsigned char alpha_;
+    boost::uint8_t red_;
+    boost::uint8_t green_;
+    boost::uint8_t blue_;
+    boost::uint8_t alpha_;
 
 public:
     color()
@@ -52,10 +53,7 @@ public:
         alpha_(0xff)
         {}
 
-    color(unsigned char red,
-          unsigned char green,
-          unsigned char blue,
-          unsigned char alpha = 0xff)
+    color(boost::uint8_t red, boost::uint8_t green, boost::uint8_t blue, boost::uint8_t alpha = 0xff)
       : red_(red),
         green_(green),
         blue_(blue),
@@ -78,14 +76,14 @@ public:
 
     color& operator=(color const& rhs)
     {
-        if (this==&rhs) 
+        if (this==&rhs)
             return *this;
-        
+
         red_   = rhs.red_;
         green_ = rhs.green_;
         blue_  = rhs.blue_;
         alpha_ = rhs.alpha_;
-        
+
         return *this;
     }
 
@@ -97,38 +95,38 @@ public:
                (alpha_ == rhs.alpha());
     }
 
-    inline unsigned char red() const
+    inline boost::uint8_t red() const
     {
         return red_;
     }
 
-    inline unsigned char green() const
+    inline boost::uint8_t green() const
     {
         return green_;
     }
-    inline unsigned char blue() const
+    inline boost::uint8_t blue() const
     {
         return blue_;
     }
-    inline unsigned char alpha() const
+    inline boost::uint8_t alpha() const
     {
         return alpha_;
     }
 
-    inline void set_red(unsigned char red)
+    inline void set_red(boost::uint8_t red)
     {
         red_ = red;
     }
-    inline void set_green(unsigned char green)
+    inline void set_green(boost::uint8_t green)
     {
         green_ = green;
     }
 
-    inline void set_blue(unsigned char blue)
+    inline void set_blue(boost::uint8_t blue)
     {
         blue_ = blue;
     }
-    inline void set_alpha(unsigned char alpha)
+    inline void set_alpha(boost::uint8_t alpha)
     {
         alpha_ = alpha;
     }

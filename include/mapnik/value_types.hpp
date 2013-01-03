@@ -34,8 +34,6 @@
 
 namespace mapnik  {
 
-#define BIGINT
-
 #ifdef BIGINT
 //typedef boost::long_long_type value_integer;
 typedef long long value_integer;

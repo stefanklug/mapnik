@@ -120,10 +120,6 @@ feature_ptr osm_featureset<filterT>::next()
         {
             feature->put_new(i->first, tr_->transcode(i->second.c_str()));
         }
-        else
-        {
-            feature->put_new(*itr, tr_->transcode(""));
-        }
     }
     return feature;
 }
