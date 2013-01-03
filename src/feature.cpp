@@ -61,9 +61,21 @@ void feature_impl::put(context_type::key_type const& key, value_null const& val)
 }
 
 template <>
+void feature_impl::put_new(context_type::key_type const& key, value_null const& val)
+{
+    put_new(key,value(val));
+}
+
+template <>
 void feature_impl::put(context_type::key_type const& key, value_bool const& val)
 {
     put(key,value(val));
+}
+
+template <>
+void feature_impl::put_new(context_type::key_type const& key, value_bool const& val)
+{
+    put_new(key,value(val));
 }
 
 template <>
@@ -73,9 +85,21 @@ void feature_impl::put(context_type::key_type const& key, value_integer const& v
 }
 
 template <>
+void feature_impl::put_new(context_type::key_type const& key, value_integer const& val)
+{
+    put_new(key,value(val));
+}
+
+template <>
 void feature_impl::put(context_type::key_type const& key, int const& val)
 {
     put(key,value(static_cast<value_integer>(val)));
+}
+
+template <>
+void feature_impl::put_new(context_type::key_type const& key, int const& val)
+{
+    put_new(key,value(static_cast<value_integer>(val)));
 }
 
 template <>
@@ -85,9 +109,21 @@ void feature_impl::put(context_type::key_type const& key, unsigned int const& va
 }
 
 template <>
+void feature_impl::put_new(context_type::key_type const& key, unsigned int const& val)
+{
+    put_new(key,value(static_cast<value_integer>(val)));
+}
+
+template <>
 void feature_impl::put(context_type::key_type const& key, value_double const& val)
 {
     put(key,value(val));
+}
+
+template <>
+void feature_impl::put_new(context_type::key_type const& key, value_double const& val)
+{
+    put_new(key,value(val));
 }
 
 template <>
@@ -97,7 +133,7 @@ void feature_impl::put(context_type::key_type const& key, value_unicode_string c
 }
 
 template <>
-void feature_impl::put_new(context_type::key_type const& key, UnicodeString const& val)
+void feature_impl::put_new(context_type::key_type const& key, value_unicode_string const& val)
 {
     put_new(key,value(val));
 }

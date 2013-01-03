@@ -25,6 +25,7 @@
 
 // mapnik
 #include <mapnik/config.hpp>
+#include <mapnik/rule.hpp>
 #include <mapnik/enumeration.hpp>
 #include <mapnik/image_filter_types.hpp>
 #include <mapnik/image_compositing.hpp>
