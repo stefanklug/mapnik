@@ -286,12 +286,12 @@ public:
 
     void set_color(color const &color, double opacity = 1.0)
     {
-        set_color(color.red(), color.green(), color.blue(), color.alpha() * opacity / 255.0);
+        set_color(color.red()/255.0, color.green()/255.0, color.blue()/255.0, color.alpha() * opacity / 255.0);
     }
 
-    void set_color(int r, int g, int b, double opacity = 1.0)
+    void set_color(double r, double g, double b, double opacity = 1.0)
     {
-        context_->set_source_rgba(r / 255.0, g / 255.0, b / 255.0, opacity);
+        context_->set_source_rgba(r, g, b, opacity);
     }
 
     void set_operator(composite_mode_e comp_op)
@@ -987,8 +987,8 @@ void cairo_renderer_base::process(building_symbolizer const& sym,
                 faces->line_to(itr->get<0>(), itr->get<1>() + height);
 
                 path_type faces_path(t_, *faces, prj_trans);
-                context.set_color(int(fill.red() * 0.8), int(fill.green() * 0.8),
-                                  int(fill.blue() * 0.8), fill.alpha() * sym.get_opacity() / 255.0);
+                context.set_color(fill.red()  * 0.8 / 255.0, fill.green() * 0.8 / 255.0,
+                                  fill.blue() * 0.8 / 255.0, fill.alpha() * sym.get_opacity() / 255.0);
                 context.add_path(faces_path);
                 context.fill();
 
@@ -1013,13 +1013,14 @@ void cairo_renderer_base::process(building_symbolizer const& sym,
             }
 
             path_type path(t_, *frame, prj_trans);
-            context.set_color(fill.red()*0.8, fill.green()*0.8, fill.blue()*0.8,sym.get_opacity());
+            context.set_color(fill.red()  * 0.8 / 255.0, fill.green() * 0.8/255.0,
+                              fill.blue() * 0.8 / 255.0, fill.alpha() * sym.get_opacity() / 255.0);
             context.set_line_width(scale_factor_);
             context.add_path(path);
             context.stroke();
 
             path_type roof_path(t_, *roof, prj_trans);
-            context.set_color(fill, fill.alpha() * sym.get_opacity() / 255.0 );
+            context.set_color(fill, sym.get_opacity());
             context.add_path(roof_path);
             context.fill();
         }
@@ -1159,7 +1160,8 @@ void render_vector_marker(cairo_context & context, pixel_position const& pos, ma
             else if(attr.fill_flag)
             {
                 double fill_opacity = attr.fill_opacity * opacity * attr.fill_color.opacity();
-                context.set_color(attr.fill_color.r,attr.fill_color.g,attr.fill_color.b, fill_opacity);
+                context.set_color(attr.fill_color.r/255.0,attr.fill_color.g/255.0,
+                                  attr.fill_color.b/255.0, fill_opacity);
                 context.fill();
             }
         }
@@ -1180,7 +1182,8 @@ void render_vector_marker(cairo_context & context, pixel_position const& pos, ma
             else if (attr.stroke_flag)
             {
                 double stroke_opacity = attr.stroke_opacity * opacity * attr.stroke_color.opacity();
-                context.set_color(attr.stroke_color.r,attr.stroke_color.g,attr.stroke_color.b, stroke_opacity);
+                context.set_color(attr.stroke_color.r/255.0,attr.stroke_color.g/255.0,
+                                  attr.stroke_color.b/255.0, stroke_opacity);
                 context.set_line_width(attr.stroke_width);
                 context.set_line_cap(line_cap_enum(attr.line_cap));
                 context.set_line_join(line_join_enum(attr.line_join));
