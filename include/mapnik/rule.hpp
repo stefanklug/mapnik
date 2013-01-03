@@ -25,6 +25,10 @@
 
 // mapnik
 #include <mapnik/symbolizer_types.hpp>
+#include <mapnik/expression.hpp>
+#include <mapnik/config.hpp> // MAPNIK_DECL
+
+// TODO - work harder to avoid needing to include these
 #include <mapnik/building_symbolizer.hpp>
 #include <mapnik/line_symbolizer.hpp>
 #include <mapnik/line_pattern_symbolizer.hpp>
@@ -36,8 +40,7 @@
 #include <mapnik/text_symbolizer.hpp>
 #include <mapnik/markers_symbolizer.hpp>
 #include <mapnik/debug_symbolizer.hpp>
-#include <mapnik/expression.hpp>
-#include <mapnik/config.hpp> // MAPNIK_DECL
+
 
 // stl
 #include <string>
@@ -45,69 +48,40 @@
 
 namespace mapnik
 {
+
+
 inline bool operator==(point_symbolizer const& lhs,
-                       point_symbolizer const& rhs)
-{
-    return (&lhs == &rhs);
-}
+                       point_symbolizer const& rhs);
+
 inline bool operator==(line_symbolizer const& lhs,
-                       line_symbolizer const& rhs)
-{
-    return (&lhs == &rhs);
-}
+                       line_symbolizer const& rhs);
+
 inline bool operator==(line_pattern_symbolizer const& lhs,
-                       line_pattern_symbolizer const& rhs)
-{
-    return (&lhs == &rhs);
-}
+                       line_pattern_symbolizer const& rhs);
 
 inline bool operator==(polygon_symbolizer const& lhs,
-                       polygon_symbolizer const& rhs)
-{
-    return (&lhs == &rhs);
-}
+                       polygon_symbolizer const& rhs);
 
 inline bool operator==(polygon_pattern_symbolizer const& lhs,
-                       polygon_pattern_symbolizer const& rhs)
-{
-    return (&lhs == &rhs);
-}
+                       polygon_pattern_symbolizer const& rhs);
 
 inline bool operator==(raster_symbolizer const& lhs,
-                       raster_symbolizer const& rhs)
-{
-    return (&lhs == &rhs);
-}
+                       raster_symbolizer const& rhs);
 
 inline bool operator==(text_symbolizer const& lhs,
-                       text_symbolizer const& rhs)
-{
-    return (&lhs == &rhs);
-}
+                       text_symbolizer const& rhs);
 
 inline bool operator==(shield_symbolizer const& lhs,
-                       shield_symbolizer const& rhs)
-{
-    return (&lhs == &rhs);
-}
+                       shield_symbolizer const& rhs);
 
 inline bool operator==(building_symbolizer const& lhs,
-                       building_symbolizer const& rhs)
-{
-    return (&lhs == &rhs);
-}
+                       building_symbolizer const& rhs);
 
 inline bool operator==(markers_symbolizer const& lhs,
-                       markers_symbolizer const& rhs)
-{
-    return (&lhs == &rhs);
-}
+                       markers_symbolizer const& rhs);
 
 inline bool operator==(debug_symbolizer const& lhs,
-                       debug_symbolizer const& rhs)
-{
-    return (&lhs == &rhs);
-}
+                       debug_symbolizer const& rhs);
 
 class MAPNIK_DECL rule
 {
@@ -127,7 +101,6 @@ public:
          double min_scale_denominator = 0,
          double max_scale_denominator = std::numeric_limits<double>::infinity());
     rule(const rule& rhs, bool deep_copy = false);
-
     rule& operator=(rule const& rhs);
     bool operator==(rule const& other);
     void set_max_scale(double scale);
@@ -138,7 +111,7 @@ public:
     std::string const& get_name() const;
     void append(symbolizer const& sym);
     void remove_at(size_t index);
-    const symbolizers& get_symbolizers() const;
+    symbolizers const& get_symbolizers() const;
     symbolizers::const_iterator begin() const;
     symbolizers::const_iterator end() const;
     symbolizers::iterator begin();
@@ -153,16 +126,7 @@ public:
 
 private:
 
-    void swap(rule& rhs) throw()
-    {
-        name_=rhs.name_;
-        min_scale_=rhs.min_scale_;
-        max_scale_=rhs.max_scale_;
-        syms_=rhs.syms_;
-        filter_=rhs.filter_;
-        else_filter_=rhs.else_filter_;
-        also_filter_=rhs.also_filter_;
-    }
+    void swap(rule& rhs) throw();
 };
 
 }

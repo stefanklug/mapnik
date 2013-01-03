@@ -23,7 +23,9 @@
 #ifndef MAPNIK_OFFSET_CONVERTER_HPP
 #define MAPNIK_OFFSET_CONVERTER_HPP
 
+#ifdef MAPNIK_LOG
 #include <mapnik/debug.hpp>
+#endif
 #include <mapnik/box2d.hpp>
 #include <mapnik/vertex.hpp>
 #include <mapnik/proj_transform.hpp>

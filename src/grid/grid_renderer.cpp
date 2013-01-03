@@ -26,6 +26,9 @@
 #include <mapnik/grid/grid_renderer_base.hpp>
 #include <mapnik/grid/grid.hpp>
 
+
+#include <mapnik/image_scaling.hpp>
+#include <mapnik/rule.hpp>
 #include <mapnik/debug.hpp>
 #include <mapnik/layer.hpp>
 #include <mapnik/label_collision_detector.hpp>

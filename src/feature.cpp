@@ -73,6 +73,18 @@ void feature_impl::put(context_type::key_type const& key, value_integer const& v
 }
 
 template <>
+void feature_impl::put(context_type::key_type const& key, int const& val)
+{
+    put(key,value(static_cast<value_integer>(val)));
+}
+
+template <>
+void feature_impl::put(context_type::key_type const& key, unsigned int const& val)
+{
+    put(key,value(static_cast<value_integer>(val)));
+}
+
+template <>
 void feature_impl::put(context_type::key_type const& key, value_double const& val)
 {
     put(key,value(val));
@@ -186,7 +198,7 @@ void feature_impl::add_geometry(geometry_type * geom)
     geom_cont_.push_back(geom);
 }
 
-unsigned feature_impl::num_geometries() const
+feature_impl::size_type feature_impl::num_geometries() const
 {
     return geom_cont_.size();
 }

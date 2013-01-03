@@ -2,7 +2,7 @@
  *
  * This file is part of Mapnik (c++ mapping toolkit)
  *
- * Copyright (C) 2011 Artem Pavlenko
+ * Copyright (C) 2012 Artem Pavlenko
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,30 +19,48 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  *****************************************************************************/
-
-#ifndef MAPNIK_EXPRESSION_HPP
-#define MAPNIK_EXPRESSION_HPP
-
 // mapnik
-#include <mapnik/config.hpp>
-#include <mapnik/expression_node.hpp>
-#include <mapnik/expression_grammar.hpp>
+#include <mapnik/image_filter_types.hpp>
+
+// boost
+#include <boost/spirit/include/karma.hpp>
+#include <boost/variant.hpp>
 
 // stl
-#include <string>
-#include <set>
+#include <vector>
 
-namespace mapnik
+namespace mapnik {
+
+namespace filter {
+
+template <typename Out>
+struct to_string_visitor : boost::static_visitor<void>
 {
+    to_string_visitor(Out & out)
+    : out_(out) {}
 
-typedef boost::shared_ptr<expr_node> expression_ptr;
-typedef std::set<expression_ptr> expression_set;
+    template <typename T>
+    void operator () (T const& filter_tag)
+    {
+        out_ << filter_tag;
+    }
 
+    Out & out_;
+};
 
-MAPNIK_DECL expression_ptr parse_expression (std::string const& wkt, std::string const& encoding = "UTF8");
-MAPNIK_DECL expression_ptr parse_expression (std::string const& wkt,
-											 mapnik::expression_grammar<std::string::const_iterator> const& g);
-
+inline std::ostream& operator<< (std::ostream& os, filter_type const& filter)
+{
+    to_string_visitor<std::ostream> visitor(os);
+    boost::apply_visitor(visitor, filter);
+    return os;
 }
 
-#endif // MAPNIK_EXPRESSION_HPP
+bool generate_image_filters(std::back_insert_iterator<std::string>& sink, std::vector<filter_type> const& filters)
+{
+    using boost::spirit::karma::stream;
+    using boost::spirit::karma::generate;
+    bool r = generate(sink, stream % ' ', filters);
+    return r;
+}
+
+}}

@@ -21,6 +21,7 @@
  *****************************************************************************/
 
 // mapnik
+#include <mapnik/debug.hpp>
 #include <mapnik/feature.hpp>
 #include <mapnik/parse_path.hpp>
 #include <mapnik/symbolizer_helpers.hpp>

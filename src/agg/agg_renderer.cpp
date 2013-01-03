@@ -26,6 +26,7 @@
 #include <mapnik/agg_helpers.hpp>
 #include <mapnik/graphics.hpp>
 
+#include <mapnik/rule.hpp>
 #include <mapnik/debug.hpp>
 #include <mapnik/layer.hpp>
 #include <mapnik/label_collision_detector.hpp>

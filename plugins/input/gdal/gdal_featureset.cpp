@@ -451,7 +451,7 @@ feature_ptr gdal_featureset::get_feature(mapnik::query const& q)
                         unsigned nodata_value = static_cast<unsigned>(nodata); // FIXME: is it realy unsigned ?
                         if (hasNoData)
                         {
-                            feature->put("NODATA",static_cast<mapnik::value_integer>(nodata_value));
+                            feature->put("NODATA",nodata_value);
                         }
                         for (unsigned y = 0; y < image.height(); ++y)
                         {

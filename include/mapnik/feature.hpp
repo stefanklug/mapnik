@@ -55,6 +55,7 @@ public:
 
     typedef mapnik::value value_type;
     typedef std::vector<value_type> cont_type;
+    typedef cont_type::size_type size_type;
     typedef feature_kv_iterator iterator;
 
     feature_impl(context_ptr const& ctx, mapnik::value_integer id);
@@ -79,7 +80,7 @@ public:
     boost::ptr_vector<geometry_type> const& paths() const;
     boost::ptr_vector<geometry_type> & paths();
     void add_geometry(geometry_type * geom);
-    unsigned num_geometries() const;
+    size_type num_geometries() const;
     geometry_type const& get_geometry(unsigned index) const;
     geometry_type& get_geometry(unsigned index);
     box2d<double> envelope() const;

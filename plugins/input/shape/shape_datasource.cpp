@@ -35,7 +35,6 @@
 #include <mapnik/debug.hpp>
 #include <mapnik/global.hpp>
 #include <mapnik/boolean.hpp>
-#include <mapnik/sql_utils.hpp>
 #include <mapnik/util/conversions.hpp>
 #include <mapnik/geom_util.hpp>
 #include <mapnik/timer.hpp>

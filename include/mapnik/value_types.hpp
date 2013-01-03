@@ -23,12 +23,14 @@
 #ifndef MAPNIK_VALUE_TYPES_HPP
 #define MAPNIK_VALUE_TYPES_HPP
 
-// uci
-#include <unicode/unistr.h>
-#include <unicode/ustring.h>
+// icu
+#include <unicode/unistr.h>  // for UnicodeString
 
 // boost
 //#include <boost/cstdint.hpp>
+
+// stl
+#include <iosfwd> // for ostream
 
 namespace mapnik  {
 

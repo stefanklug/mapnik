@@ -26,7 +26,6 @@
 // mapnik
 #include <mapnik/config.hpp>
 #include <mapnik/feature.hpp>
-#include <mapnik/datasource.hpp>
 #include <mapnik/noncopyable.hpp>
 #include <mapnik/unicode.hpp>
 

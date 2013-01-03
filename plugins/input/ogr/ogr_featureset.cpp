@@ -117,7 +117,7 @@ feature_ptr ogr_featureset::next()
             {
             case OFTInteger:
             {
-                feature->put( fld_name, static_cast<mapnik::value_integer>(poFeature->GetFieldAsInteger(i)));
+                feature->put( fld_name, poFeature->GetFieldAsInteger(i));
                 break;
             }
 

@@ -27,15 +27,17 @@
 
 // mapnik
 #include <mapnik/map.hpp>
+#include <mapnik/debug.hpp>
 #include <mapnik/feature.hpp>
 #include <mapnik/feature_style_processor.hpp>
 #include <mapnik/query.hpp>
 #include <mapnik/feature.hpp>
+#include <mapnik/featureset.hpp>
+#include <mapnik/memory_datasource.hpp>
 #include <mapnik/feature_type_style.hpp>
 #include <mapnik/box2d.hpp>
-#include <mapnik/datasource.hpp>
-#include <mapnik/memory_datasource.hpp>
 #include <mapnik/layer.hpp>
+#include <mapnik/rule.hpp>
 #include <mapnik/attribute_collector.hpp>
 #include <mapnik/expression_evaluator.hpp>
 #include <mapnik/utils.hpp>

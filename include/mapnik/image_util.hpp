@@ -32,7 +32,6 @@
 #endif
 
 // boost
-#include <boost/algorithm/string.hpp>
 #include <boost/optional.hpp>
 
 // stl
@@ -106,37 +105,17 @@ void save_as_jpeg(std::string const& filename,
                   T const& image);
 #endif
 
-inline bool is_png (std::string const& filename)
-{
-    return boost::algorithm::iends_with(filename,std::string(".png"));
-}
+inline bool is_png (std::string const& filename);
 
-inline bool is_jpeg (std::string const& filename)
-{
-    return boost::algorithm::iends_with(filename,std::string(".jpg")) ||
-        boost::algorithm::iends_with(filename,std::string(".jpeg"));
-}
+inline bool is_jpeg (std::string const& filename);
 
-inline bool is_tiff (std::string const& filename)
-{
-    return boost::algorithm::iends_with(filename,std::string(".tif")) ||
-        boost::algorithm::iends_with(filename,std::string(".tiff"));
-}
+inline bool is_tiff (std::string const& filename);
 
-inline bool is_pdf (std::string const& filename)
-{
-    return boost::algorithm::iends_with(filename,std::string(".pdf"));
-}
+inline bool is_pdf (std::string const& filename);
 
-inline bool is_svg (std::string const& filename)
-{
-    return boost::algorithm::iends_with(filename,std::string(".svg"));
-}
+inline bool is_svg (std::string const& filename);
 
-inline bool is_ps (std::string const& filename)
-{
-    return boost::algorithm::iends_with(filename,std::string(".ps"));
-}
+inline bool is_ps (std::string const& filename);
 
 inline boost::optional<std::string> type_from_filename(std::string const& filename)
 

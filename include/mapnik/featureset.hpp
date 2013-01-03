@@ -2,7 +2,7 @@
  *
  * This file is part of Mapnik (c++ mapping toolkit)
  *
- * Copyright (C) 2011 Artem Pavlenko
+ * Copyright (C) 2012 Artem Pavlenko
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,29 +20,29 @@
  *
  *****************************************************************************/
 
-#ifndef MAPNIK_EXPRESSION_HPP
-#define MAPNIK_EXPRESSION_HPP
+#ifndef MAPNIK_FEATURESET_HPP
+#define MAPNIK_FEATURESET_HPP
 
 // mapnik
 #include <mapnik/config.hpp>
-#include <mapnik/expression_node.hpp>
-#include <mapnik/expression_grammar.hpp>
+#include <mapnik/noncopyable.hpp>
 
-// stl
-#include <string>
-#include <set>
+// boost
+#include <boost/shared_ptr.hpp>
 
-namespace mapnik
+namespace mapnik {
+
+class feature_impl;
+typedef boost::shared_ptr<feature_impl> feature_ptr;
+
+struct MAPNIK_DECL Featureset : private mapnik::noncopyable
 {
+    virtual feature_ptr next() = 0;
+    virtual ~Featureset() {}
+};
 
-typedef boost::shared_ptr<expr_node> expression_ptr;
-typedef std::set<expression_ptr> expression_set;
-
-
-MAPNIK_DECL expression_ptr parse_expression (std::string const& wkt, std::string const& encoding = "UTF8");
-MAPNIK_DECL expression_ptr parse_expression (std::string const& wkt,
-											 mapnik::expression_grammar<std::string::const_iterator> const& g);
+typedef MAPNIK_DECL boost::shared_ptr<Featureset> featureset_ptr;
 
 }
 
-#endif // MAPNIK_EXPRESSION_HPP
+#endif // MAPNIK_FEATURESET_HPP

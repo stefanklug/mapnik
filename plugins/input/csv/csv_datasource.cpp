@@ -51,6 +51,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using mapnik::datasource;
 using mapnik::parameters;
@@ -273,7 +274,8 @@ void csv_datasource::parse_csv(T & stream,
         for (; beg != tok.end(); ++beg)
         {
             std::string val = mapnik::util::trim_copy(*beg);
-            std::string lower_val = boost::algorithm::to_lower_copy(val);
+            std::string lower_val = val;
+            std::transform(lower_val.begin(), lower_val.end(), lower_val.begin(), ::tolower);
             if (lower_val == "wkt"
                 || (lower_val.find("geom") != std::string::npos))
             {
@@ -351,7 +353,8 @@ void csv_datasource::parse_csv(T & stream,
                         }
                         else
                         {
-                            std::string lower_val = boost::algorithm::to_lower_copy(val);
+                            std::string lower_val = val;
+                            std::transform(lower_val.begin(), lower_val.end(), lower_val.begin(), ::tolower);
                             if (lower_val == "wkt"
                                 || (lower_val.find("geom") != std::string::npos))
                             {

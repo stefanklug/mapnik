@@ -103,7 +103,7 @@ feature_ptr sqlite_featureset::next()
             {
             case SQLITE_INTEGER:
             {
-                feature->put(fld_name_str, static_cast<mapnik::value_integer>(rs_->column_integer64(i)));
+                feature->put(fld_name_str, rs_->column_integer64(i));
                 break;
             }
 

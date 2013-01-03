@@ -21,11 +21,15 @@
  *****************************************************************************/
 
 // mapnik
+#include <mapnik/rule.hpp>
+#include <mapnik/color.hpp>
+#include <mapnik/font_set.hpp>
+#include <mapnik/enumeration.hpp>
 #include <mapnik/layer.hpp>
 #include <mapnik/feature_type_style.hpp>
 #include <mapnik/debug.hpp>
 #include <mapnik/map.hpp>
-#include <mapnik/datasource.hpp>
+#include <mapnik/featureset.hpp>
 #include <mapnik/projection.hpp>
 #include <mapnik/proj_transform.hpp>
 #include <mapnik/ctrans.hpp>

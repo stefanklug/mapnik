@@ -25,7 +25,9 @@
 
 // mapnik
 #include <mapnik/config.hpp>
+#ifdef MAPNIK_LOG
 #include <mapnik/debug.hpp>
+#endif
 #include <mapnik/feature.hpp>
 #include <mapnik/value.hpp>
 #include <mapnik/transform_expression.hpp>

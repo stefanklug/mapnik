@@ -21,9 +21,23 @@
  *****************************************************************************/
 
 // mapnik
+#include <mapnik/debug.hpp>
 #include <mapnik/rule.hpp>
 #include <mapnik/raster_colorizer.hpp>
 #include <mapnik/expression_string.hpp>
+
+// all symbolizers
+#include <mapnik/building_symbolizer.hpp>
+#include <mapnik/line_symbolizer.hpp>
+#include <mapnik/line_pattern_symbolizer.hpp>
+#include <mapnik/polygon_symbolizer.hpp>
+#include <mapnik/polygon_pattern_symbolizer.hpp>
+#include <mapnik/point_symbolizer.hpp>
+#include <mapnik/raster_symbolizer.hpp>
+#include <mapnik/shield_symbolizer.hpp>
+#include <mapnik/text_symbolizer.hpp>
+#include <mapnik/markers_symbolizer.hpp>
+#include <mapnik/debug_symbolizer.hpp>
 
 // boost
 #include <boost/shared_ptr.hpp>
@@ -84,6 +98,71 @@ namespace {
 namespace mapnik
 {
 
+bool operator==(point_symbolizer const& lhs,
+                point_symbolizer const& rhs)
+{
+    return (&lhs == &rhs);
+}
+bool operator==(line_symbolizer const& lhs,
+                line_symbolizer const& rhs)
+{
+    return (&lhs == &rhs);
+}
+
+bool operator==(line_pattern_symbolizer const& lhs,
+                line_pattern_symbolizer const& rhs)
+{
+    return (&lhs == &rhs);
+}
+
+bool operator==(polygon_symbolizer const& lhs,
+                polygon_symbolizer const& rhs)
+{
+    return (&lhs == &rhs);
+}
+
+bool operator==(polygon_pattern_symbolizer const& lhs,
+                polygon_pattern_symbolizer const& rhs)
+{
+    return (&lhs == &rhs);
+}
+
+bool operator==(raster_symbolizer const& lhs,
+                raster_symbolizer const& rhs)
+{
+    return (&lhs == &rhs);
+}
+
+bool operator==(text_symbolizer const& lhs,
+                text_symbolizer const& rhs)
+{
+    return (&lhs == &rhs);
+}
+
+bool operator==(shield_symbolizer const& lhs,
+                shield_symbolizer const& rhs)
+{
+    return (&lhs == &rhs);
+}
+
+bool operator==(building_symbolizer const& lhs,
+                building_symbolizer const& rhs)
+{
+    return (&lhs == &rhs);
+}
+
+bool operator==(markers_symbolizer const& lhs,
+                markers_symbolizer const& rhs)
+{
+    return (&lhs == &rhs);
+}
+
+bool operator==(debug_symbolizer const& lhs,
+                debug_symbolizer const& rhs)
+{
+    return (&lhs == &rhs);
+}
+
 rule::rule()
     : name_(),
       min_scale_(0),
@@ -132,6 +211,17 @@ rule& rule::operator=(rule const& rhs)
     rule tmp(rhs);
     swap(tmp);
     return *this;
+}
+
+void rule::swap(rule& rhs) throw()
+{
+    name_=rhs.name_;
+    min_scale_=rhs.min_scale_;
+    max_scale_=rhs.max_scale_;
+    syms_=rhs.syms_;
+    filter_=rhs.filter_;
+    else_filter_=rhs.else_filter_;
+    also_filter_=rhs.also_filter_;
 }
 
 bool rule::operator==(rule const& other)

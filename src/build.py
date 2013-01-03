@@ -100,6 +100,7 @@ else: # unix, non-macos
 
 source = Split(
     """
+    image_filter_types.cpp
     feature.cpp
     miniz_png.cpp
     color.cpp
