@@ -30,10 +30,11 @@
 
 // boost
 #include <boost/spirit/include/qi.hpp>
+#include <boost/cstdint.hpp> // for int16_t and int32_t
 #include <mapnik/mapped_memory_cache.hpp>
+
 // stl
 #include <string>
-
 
 using mapnik::mapped_memory_cache;
 
