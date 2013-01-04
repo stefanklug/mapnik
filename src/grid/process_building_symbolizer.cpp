@@ -69,8 +69,7 @@ void grid_renderer<T>::process(building_symbolizer const& sym,
     expression_ptr height_expr = sym.height();
     if (height_expr)
     {
-        value_type result = boost::apply_visitor(evaluate<feature_impl
-,value_type>(feature), *height_expr);
+        value_type result = boost::apply_visitor(evaluate<feature_impl,value_type>(feature), *height_expr);
         height = result.to_double() * scale_factor_;
     }
 
