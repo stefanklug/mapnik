@@ -47,8 +47,7 @@ node_ptr text_node::from_xml(xml_node const& xml)
     return boost::make_shared<text_node>(xml.get_value<expression_ptr>());
 }
 
-void text_node::apply(char_properties const& p, feature_impl
- const& feature, processed_text &output) const
+void text_node::apply(char_properties const& p, feature_impl const& feature, processed_text &output) const
 {
     UnicodeString text_str = boost::apply_visitor(evaluate<feature_impl,value_type>(feature), *text_).to_unicode();
     if (p.text_transform == UPPERCASE)

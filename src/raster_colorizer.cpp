@@ -119,8 +119,7 @@ bool raster_colorizer::add_stop(colorizer_stop const& stop)
     return true;
 }
 
-void raster_colorizer::colorize(raster_ptr const& raster, feature_impl
- const& f) const
+void raster_colorizer::colorize(raster_ptr const& raster, feature_impl const& f) const
 {
     unsigned *imageData = raster->data_.getData();
 

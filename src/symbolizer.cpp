@@ -28,8 +28,7 @@
 
 namespace mapnik {
 
-void evaluate_transform(agg::trans_affine& tr, feature_impl
- const& feature,
+void evaluate_transform(agg::trans_affine& tr, feature_impl const& feature,
                         transform_list_ptr const& trans_expr)
 {
     if (trans_expr)

@@ -42,8 +42,7 @@ void list_node::to_xml(boost::property_tree::ptree & xml) const
 }
 
 
-void list_node::apply(char_properties const& p, feature_impl
- const& feature, processed_text &output) const
+void list_node::apply(char_properties const& p, feature_impl const& feature, processed_text &output) const
 {    
     BOOST_FOREACH(node_ptr const& node, children_)
     {

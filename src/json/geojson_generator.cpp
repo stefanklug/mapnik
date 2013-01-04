@@ -38,8 +38,7 @@ feature_generator::feature_generator()
 
 feature_generator::~feature_generator() {}
 
-bool feature_generator::generate(std::string & geojson, mapnik::feature_impl
- const& f)
+bool feature_generator::generate(std::string & geojson, mapnik::feature_impl const& f)
 {
     sink_type sink(geojson);
     return karma::generate(sink, *grammar_,f);
@@ -67,8 +66,7 @@ bool geometry_generator::generate(std::string & geojson, mapnik::geometry_contai
 
 namespace  mapnik { namespace json {
 
-bool feature_generator::generate(std::string & geojson, mapnik::feature_impl
- const& f)
+bool feature_generator::generate(std::string & geojson, mapnik::feature_impl const& f)
 {
     std::ostringstream s;
     s << BOOST_VERSION/100000 << "." << BOOST_VERSION/100 % 1000  << "." << BOOST_VERSION % 100;
