@@ -23,6 +23,7 @@
 // mapnik
 #include <mapnik/debug.hpp>
 #include <mapnik/rule.hpp>
+#include <mapnik/debug.hpp>
 #include <mapnik/raster_colorizer.hpp>
 #include <mapnik/expression_string.hpp>
 
@@ -43,6 +44,9 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/concept_check.hpp>
+
+// stl
+#include <limits>
 
 namespace {
 
@@ -229,6 +233,17 @@ void rule::swap(rule& rhs) throw()
 bool rule::operator==(rule const& other)
 {
     return  (this == &other);
+}
+
+void rule::swap(rule& rhs) throw()
+{
+    name_=rhs.name_;
+    min_scale_=rhs.min_scale_;
+    max_scale_=rhs.max_scale_;
+    syms_=rhs.syms_;
+    filter_=rhs.filter_;
+    else_filter_=rhs.else_filter_;
+    also_filter_=rhs.also_filter_;
 }
 
 void rule::set_max_scale(double scale)

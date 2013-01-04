@@ -45,7 +45,6 @@
 #include <mapnik/text_placements/base.hpp>  // for text_placements
 #include <mapnik/transform_expression.hpp>
 
-
 // boost
 #include <boost/variant.hpp>
 #include <boost/concept_check.hpp>
