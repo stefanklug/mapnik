@@ -259,7 +259,6 @@ void save_to_stream(T const& image,
 {
     if (stream && image.width() > 0 && image.height() > 0)
     {
-        // copy and make lowercase
         std::string t = type;
         std::transform(t.begin(), t.end(), t.begin(), ::tolower);
         if (t == "png" || boost::algorithm::starts_with(t, "png"))

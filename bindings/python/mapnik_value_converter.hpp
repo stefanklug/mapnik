@@ -23,7 +23,6 @@
 #define MAPNIK_PYTHON_BINDING_VALUE_CONVERTER_INCLUDED
 
 // mapnik
-#include <mapnik/value_types.hpp>
 #include <mapnik/value.hpp>
 
 // boost
