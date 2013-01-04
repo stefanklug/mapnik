@@ -208,6 +208,7 @@ void dbf_file::read_header()
             desc.index_=i;
             file_.read(name,10);
             desc.name_=name;
+            // TODO - when is this trim needed?
             mapnik::util::trim(desc.name_);
             skip(1);
             desc.type_=file_.get();

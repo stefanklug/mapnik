@@ -126,7 +126,7 @@ void grid_renderer<T>::process(building_symbolizer const& sym,
             for (unsigned j=0;j<geom.size();++j)
             {
                 double x,y;
-                unsigned cm = geom.vertex(&x,&y);
+                cm = geom.vertex(&x,&y);
                 if (cm == SEG_MOVETO)
                 {
                     frame->move_to(x,y+height);

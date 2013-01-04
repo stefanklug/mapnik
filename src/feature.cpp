@@ -78,6 +78,7 @@ void feature_impl::put_new(context_type::key_type const& key, value_bool const& 
     put_new(key,value(val));
 }
 
+#ifdef BIGINT
 template <>
 void feature_impl::put(context_type::key_type const& key, value_integer const& val)
 {
@@ -89,6 +90,7 @@ void feature_impl::put_new(context_type::key_type const& key, value_integer cons
 {
     put_new(key,value(val));
 }
+#endif
 
 template <>
 void feature_impl::put(context_type::key_type const& key, int const& val)

@@ -350,9 +350,9 @@ namespace params_detail {
         typedef boost::optional<T> return_type;
         static return_type extract(parameters const& params,
                                    std::string const& name,
-                                   boost::optional<T> const& default_value)
+                                   boost::optional<T> const& default_opt_value)
         {
-            boost::optional<T> result(default_value);
+            boost::optional<T> result(default_opt_value);
             parameters::const_iterator itr = params.find(name);
             if (itr != params.end())
             {
@@ -377,9 +377,9 @@ boost::optional<std::string> parameters::get(std::string const& key) const
 
 template <>
 boost::optional<std::string> parameters::get(std::string const& key,
-                                             std::string const& default_value) const
+                                             std::string const& default_opt_value) const
 {
-    return params_detail::converter<std::string>::extract(*this,key,boost::optional<std::string>(default_value));
+    return params_detail::converter<std::string>::extract(*this,key,boost::optional<std::string>(default_opt_value));
 }
 
 // double
@@ -391,9 +391,9 @@ boost::optional<value_double> parameters::get(std::string const& key) const
 
 template <>
 boost::optional<value_double> parameters::get(std::string const& key,
-                                             double const& default_value) const
+                                             double const& default_opt_value) const
 {
-    return params_detail::converter<value_double>::extract(*this,key,boost::optional<value_double>(default_value));
+    return params_detail::converter<value_double>::extract(*this,key,boost::optional<value_double>(default_opt_value));
 }
 
 // int
@@ -405,12 +405,13 @@ boost::optional<int> parameters::get(std::string const& key) const
 
 template <>
 boost::optional<int> parameters::get(std::string const& key,
-                                             int const& default_value) const
+                                             int const& default_opt_value) const
 {
-    return params_detail::converter<int>::extract(*this,key,boost::optional<int>(default_value));
+    return params_detail::converter<int>::extract(*this,key,boost::optional<int>(default_opt_value));
 }
 
-// int
+#ifdef BIGINT
+// bigint
 template <>
 boost::optional<value_integer> parameters::get(std::string const& key) const
 {
@@ -419,11 +420,11 @@ boost::optional<value_integer> parameters::get(std::string const& key) const
 
 template <>
 boost::optional<value_integer> parameters::get(std::string const& key,
-                                             value_integer const& default_value) const
+                                             value_integer const& default_opt_value) const
 {
-    return params_detail::converter<value_integer>::extract(*this,key,boost::optional<value_integer>(default_value));
+    return params_detail::converter<value_integer>::extract(*this,key,boost::optional<value_integer>(default_opt_value));
 }
-
+#endif
 
 // mapnik::boolean
 template <>
@@ -434,9 +435,9 @@ boost::optional<mapnik::boolean> parameters::get(std::string const& key) const
 
 template <>
 boost::optional<mapnik::boolean> parameters::get(std::string const& key,
-                                             mapnik::boolean const& default_value) const
+                                             mapnik::boolean const& default_opt_value) const
 {
-    return params_detail::converter<mapnik::boolean>::extract(*this,key,boost::optional<mapnik::boolean>(default_value));
+    return params_detail::converter<mapnik::boolean>::extract(*this,key,boost::optional<mapnik::boolean>(default_opt_value));
 }
 
 }

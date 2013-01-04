@@ -27,6 +27,9 @@
 #include <mapnik/expression.hpp>
 #include <mapnik/feature.hpp>
 
+// boost
+#include <boost/property_tree/ptree_fwd.hpp>
+
 namespace mapnik {
 namespace formatting {
 class expression_format: public node {

@@ -26,6 +26,7 @@
 
 // boost
 #include <boost/foreach.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 namespace mapnik {
 using boost::property_tree::ptree;

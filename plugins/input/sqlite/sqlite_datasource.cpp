@@ -32,7 +32,6 @@
 #include <mapnik/util/geometry_to_ds_type.hpp>
 #include <mapnik/timer.hpp>
 #include <mapnik/wkb.hpp>
-#include <mapnik/value_types.hpp>
 #include <mapnik/util/trim.hpp>
 
 // boost

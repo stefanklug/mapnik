@@ -49,7 +49,7 @@ public:
     template <typename T>
     boost::optional<T> get(std::string const& key) const;
     template <typename T>
-    boost::optional<T> get(std::string const& key, T const& default_value) const;
+    boost::optional<T> get(std::string const& key, T const& default_opt_value) const;
 };
 
 }

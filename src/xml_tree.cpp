@@ -130,7 +130,11 @@ DEFINE_NAME_TRAIT( double, "double")
 DEFINE_NAME_TRAIT( float, "float")
 DEFINE_NAME_TRAIT( unsigned, "unsigned")
 DEFINE_NAME_TRAIT( boolean, "boolean")
+#ifdef BIGINT
 DEFINE_NAME_TRAIT( mapnik::value_integer, "long long" )
+#else
+DEFINE_NAME_TRAIT( mapnik::value_integer, "int" )
+#endif
 DEFINE_NAME_TRAIT( std::string, "string" )
 DEFINE_NAME_TRAIT( color, "color" )
 DEFINE_NAME_TRAIT(expression_ptr, "expression_ptr" )
@@ -400,11 +404,11 @@ boost::optional<T> xml_node::get_opt_attr(std::string const& name) const
 }
 
 template <typename T>
-T xml_node::get_attr(std::string const& name, T const& default_value) const
+T xml_node::get_attr(std::string const& name, T const& default_opt_value) const
 {
     boost::optional<T> value = get_opt_attr<T>(name);
     if (value) return *value;
-    return default_value;
+    return default_opt_value;
 }
 
 template <typename T>
