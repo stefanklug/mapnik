@@ -709,21 +709,23 @@ def FindBoost(context, prefixes, thread_flag):
 
     # note: must call normpath to strip trailing slash otherwise dirname
     # does not remove 'lib' and 'include'
-    prefixes.insert(0,os.path.dirname(os.path.normpath(env['BOOST_INCLUDES'])))
-    prefixes.insert(0,os.path.dirname(os.path.normpath(env['BOOST_LIBS'])))
-    for searchDir in prefixes:
-        libItems = glob(os.path.join(searchDir, env['LIBDIR_SCHEMA'], '%s*.*' % search_lib))
-        if not libItems:
-            libItems = glob(os.path.join(searchDir, 'lib/%s*.*' % search_lib))
-        incItems = glob(os.path.join(searchDir, 'include/boost*/'))
-        if len(libItems) >= 1 and len(incItems) >= 1:
-            BOOST_LIB_DIR = os.path.dirname(libItems[0])
-            BOOST_INCLUDE_DIR = incItems[0].rstrip('boost/')
-            shortest_lib_name = shortest_name(libItems)
-            match = re.search(r'%s(.*)\..*' % search_lib, shortest_lib_name)
-            if hasattr(match,'groups'):
-                BOOST_APPEND = match.groups()[0]
-            break
+    if not env['BOOST_LIBS'] and not env['BOOST_INCLUDES']:
+        for searchDir in prefixes:
+            libItems = glob(os.path.join(searchDir, env['LIBDIR_SCHEMA'], '%s*.*' % search_lib))
+            if not libItems:
+                libItems = glob(os.path.join(searchDir, 'lib/%s*.*' % search_lib))
+            incItems = glob(os.path.join(searchDir, 'include/boost*/'))
+            if len(libItems) >= 1 and len(incItems) >= 1:
+                BOOST_LIB_DIR = os.path.dirname(libItems[0])
+                BOOST_INCLUDE_DIR = incItems[0].rstrip('boost/')
+                shortest_lib_name = shortest_name(libItems)
+                context.Message(str(libItems))
+                context.Message(shortest_lib_name)
+                match = re.search(r'%s(.*)\..*' % search_lib, shortest_lib_name)
+                if hasattr(match,'groups'):
+                    context.Message(str(match.groups()))
+                    BOOST_APPEND = match.groups()[0]
+                break
 
     msg = str()
 
